@@ -1,0 +1,5 @@
+rootProject.name = 'auctiontoy'
+include 'auctiontoy-api',
+        'auctiontoy-persistence'
+include 'auctiontoy-domain'
+
