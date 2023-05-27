@@ -39,6 +39,7 @@ class MemberJpaEntity (
         memberStatus = this.memberStatus,
         id = this.id,
         password = this.password,
-        name = this.name
+        name = this.name,
+        createdDate = this.createdAt.toString()
     )
 }

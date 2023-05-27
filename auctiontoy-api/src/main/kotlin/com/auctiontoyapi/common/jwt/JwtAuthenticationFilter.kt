@@ -18,7 +18,7 @@ class JwtAuthenticationFilter(
         filterChain: FilterChain
     ) {
         // 헤더에 Authorization이 있다면 가져온다.
-        val authorizationHeader: String = request.getHeader("Authorization")
+        val authorizationHeader: String = request.getHeader("Authorization") ?: return filterChain.doFilter(request, response)
         // Bearer타입 토큰이 있을 때 가져온다.
         val token = authorizationHeader.substring("Bearer ".length)
 

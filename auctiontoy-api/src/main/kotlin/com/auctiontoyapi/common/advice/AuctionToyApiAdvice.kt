@@ -12,12 +12,12 @@ class AuctionToyApiAdvice {
 
     @ExceptionHandler(BusinessException::class)
     @ResponseStatus(HttpStatus.OK)
-    fun exceptionHandler(e: BusinessException): ResponseDTO<Unit> {
-        return ResponseDTO.fail(e.resultCode, e.message)
+    fun exceptionHandler(e: BusinessException): ResponseDTO<String> {
+        return ResponseDTO.fail(e.resultCode, content = "error", message = e.message)
     }
 
     @ExceptionHandler(Exception::class)
-    fun exceptionHandler(e: Exception): String {
-        return "error"
+    fun exceptionHandler(e: Exception): String? {
+        return e.message
     }
 }

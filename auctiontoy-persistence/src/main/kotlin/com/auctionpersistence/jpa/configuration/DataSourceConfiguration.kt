@@ -22,7 +22,11 @@ import javax.sql.DataSource
 
 @Configuration
 @ConditionalOnClass(EnableDataSourceConfiguration::class)
-@EnableJpaRepositories(entityManagerFactoryRef = "auctionEntityManagerFactory", transactionManagerRef = "auctionTransactionManager", basePackageClasses = [Jpa::class])
+@EnableJpaRepositories(
+    entityManagerFactoryRef = "auctionEntityManagerFactory",
+    transactionManagerRef = "auctionTransactionManager",
+    basePackageClasses = [Jpa::class]
+)
 @EnableTransactionManagement
 @EnableJpaAuditing
 class DataSourceConfiguration {
@@ -30,11 +34,8 @@ class DataSourceConfiguration {
     @Primary
     @ConfigurationProperties(prefix = "auction.datasource")
     fun auctionDataSourceProperties(): HikariConfig {
-
-        val data = HikariConfig()
-        return data
+        return HikariConfig()
     }
-
 
     @Bean
     fun auctionDataSource(): DataSource {

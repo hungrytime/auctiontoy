@@ -5,7 +5,8 @@ import com.auctiontoydomain.Member
 data class MemberVO (
     val id: String,
     val password: String,
-    val name: String
+    val name: String,
+    val createdDate: String? = null
 ) {
     fun to() = Member(
         id = id,
@@ -17,7 +18,8 @@ data class MemberVO (
         fun from(member: Member) = MemberVO(
             id = member.id,
             password = member.password,
-            name = member.name
+            name = member.name,
+            createdDate = member.createdDate
         )
     }
 }

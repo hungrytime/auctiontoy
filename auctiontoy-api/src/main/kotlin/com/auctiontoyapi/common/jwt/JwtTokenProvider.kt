@@ -21,10 +21,6 @@ class JwtTokenProvider(
     private val secretKey: String = ""
     private val TOKEN_EXPIRE_TIME: Long = 10 * 60 * 1000L
 
-    //TODO access, refresh token 사용
-    private val ACCESS_TOKEN_EXPIRE_TIME = 30 * 60L
-    private val REFRESH_TOKEN_EXPIRE_TIME = 60 * 60L
-
     private fun generateKey(): Key {
         return Keys.hmacShaKeyFor(secretKey.toByteArray(StandardCharsets.UTF_8))
     }

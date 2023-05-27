@@ -6,6 +6,7 @@ import com.auctiontoyapi.application.port.out.FindMemberPort
 import com.auctiontoyapi.common.jwt.JwtTokenProvider
 import com.auctiontoydomain.exception.BusinessException
 import com.auctiontoydomain.exception.enum.ResultCode
+import mu.KLogging
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.stereotype.Service
@@ -27,13 +28,12 @@ class MemberInquiryService(
                 UsernamePasswordAuthenticationToken(username, password, null)
             )
         } catch (e: Exception) {
-            println(e.message)
+            logger.error(e.message)
             throw BusinessException(ResultCode.FAIL, e.message)
         }
-        // 예외가 발생하지 않았다면 인증에 성공한 것.
         // 토큰 생성
-        val token = jwtTokenProvider.createToken(username)
-
-        return token
+        return jwtTokenProvider.createToken(username)
     }
+
+    companion object : KLogging()
 }
