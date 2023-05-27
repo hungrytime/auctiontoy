@@ -13,13 +13,13 @@ class MemberInquriyController(
 ) {
     @GetMapping("/signin")
     fun signIn(@RequestBody member: JoinMemberDTO): ResponseDTO<String> {
-        val token = findMemberUseCase.signIn(member.username, member.password)
-        println(token)
+        val token = findMemberUseCase.signIn(member.id, member.password)
         return ResponseDTO.success(token)
     }
 
     @GetMapping("/info")
     fun getMemberInfo(@RequestParam memberId: String): ResponseDTO<MemberInfoDTO> {
-        return ResponseDTO.success(MemberInfoDTO.from(findMemberUseCase.findMemberByMemberId(memberId)))
+        val member = findMemberUseCase.findMemberByMemberId(memberId) ?: throw Exception("$memberId 로 등록된 정보가 존재하지 않습니다")
+        return ResponseDTO.success(MemberInfoDTO.from(member))
     }
 }

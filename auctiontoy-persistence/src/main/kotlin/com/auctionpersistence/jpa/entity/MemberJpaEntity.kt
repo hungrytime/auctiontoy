@@ -12,7 +12,7 @@ class MemberJpaEntity (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val memberId: Long? = null,
 
-    val id: String,
+    val userId: String,
     val password: String,
     val name: String,
 
@@ -28,7 +28,7 @@ class MemberJpaEntity (
         fun from(member: Member) = MemberJpaEntity(
                 memberId = member.memberId,
                 memberStatus = member.memberStatus,
-                id = member.id,
+                userId = member.id,
                 password = member.password,
                 name = member.name
             )
@@ -37,7 +37,7 @@ class MemberJpaEntity (
     fun to() = Member(
         memberId = this.memberId,
         memberStatus = this.memberStatus,
-        id = this.id,
+        id = this.userId,
         password = this.password,
         name = this.name,
         createdDate = this.createdAt.toString()

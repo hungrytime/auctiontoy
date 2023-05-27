@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 class MemberInquiryAdapter(
     private val memberJpaRepository: MemberJpaRepository
 ) : FindMemberPort {
-    override fun findMemberById(id: String): Member {
-        return memberJpaRepository.findByUsername(id)?.to() ?: throw Exception("멤버 없다")
+    override fun findMemberById(id: String): Member? {
+        return memberJpaRepository.findByUserId(id)?.to()
     }
 }

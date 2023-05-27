@@ -17,22 +17,23 @@ class MemberInquiryService(
     private val authenticationManager: AuthenticationManager,
     private val jwtTokenProvider: JwtTokenProvider
 ) : FindMemberUseCase{
-    override fun findMemberByMemberId(id: String): MemberVO {
-        return MemberVO.from(findMemberPort.findMemberById(id))
+    override fun findMemberByMemberId(id: String): MemberVO? {
+        val member = findMemberPort.findMemberById(id) ?: return null
+        return MemberVO.from(member)
     }
 
-    override fun signIn(username: String, password: String): String {
+    override fun signIn(id: String, password: String): String {
         try {
             // 인증시도
             authenticationManager.authenticate(
-                UsernamePasswordAuthenticationToken(username, password, null)
+                UsernamePasswordAuthenticationToken(id, password, null)
             )
         } catch (e: Exception) {
             logger.error(e.message)
             throw BusinessException(ResultCode.FAIL, e.message)
         }
         // 토큰 생성
-        return jwtTokenProvider.createToken(username)
+        return jwtTokenProvider.createToken(id)
     }
 
     companion object : KLogging()
