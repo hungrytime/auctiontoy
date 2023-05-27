@@ -2,6 +2,7 @@ package com.auctionpersistence.jpa.entity
 
 import com.auctionpersistence.jpa.entity.base.BaseEntity
 import java.math.BigDecimal
+import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
@@ -19,5 +20,7 @@ class ItemJpaEntity (
     val desiredPrice: BigDecimal,
     val bidCount: Long,
     val totalBidAmount: BigDecimal,
-    val highestBidMemberId: Long? = null
+    val highestBidMemberId: Long? = null,
+    val auctionStartTime: LocalDateTime,
+    val auctionEndTime: LocalDateTime
 ) : BaseEntity()
