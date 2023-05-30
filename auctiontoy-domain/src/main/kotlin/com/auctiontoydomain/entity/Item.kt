@@ -1,6 +1,7 @@
 package com.auctiontoydomain.entity
 
 import java.math.BigDecimal
+import java.time.LocalDateTime
 
 data class Item (
     val itemId: Long? = null,
@@ -11,7 +12,9 @@ data class Item (
     val desiredPrice: BigDecimal,
     val bidCount: Long,
     val totalBidAmount: BigDecimal,
-    val highestBidMemberId: Long? = null
+    val highestBidMemberId: Long? = null,
+    val auctionStartTime: LocalDateTime,
+    val auctionEndTime: LocalDateTime
 ) {
     companion object {
         fun makeItem(
@@ -19,8 +22,8 @@ data class Item (
             itemName: String,
             basePrice: BigDecimal,
             desiredPrice: BigDecimal,
-            auctionStartTime: String,
-            auctionEndTime: String
+            auctionStartTime: LocalDateTime,
+            auctionEndTime: LocalDateTime
         ) = Item(
             memberId = memberId,
             name = itemName,
@@ -29,7 +32,9 @@ data class Item (
             desiredPrice = desiredPrice,
             bidCount = 0,
             totalBidAmount = BigDecimal.ZERO,
-            highestBidMemberId = 0L
+            highestBidMemberId = 0L,
+            auctionStartTime = auctionStartTime,
+            auctionEndTime = auctionEndTime
         )
     }
 }

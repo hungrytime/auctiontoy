@@ -1,6 +1,7 @@
 package com.auctionpersistence.jpa.entity
 
 import com.auctionpersistence.jpa.entity.base.BaseEntity
+import com.auctiontoydomain.entity.Item
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import javax.persistence.*
@@ -23,4 +24,20 @@ class ItemJpaEntity (
     val highestBidMemberId: Long? = null,
     val auctionStartTime: LocalDateTime,
     val auctionEndTime: LocalDateTime
-) : BaseEntity()
+) : BaseEntity() {
+    companion object {
+        fun from(item: Item) = ItemJpaEntity(
+            itemId = item.itemId,
+            memberId = item.memberId,
+            name = item.name,
+            basePrice = item.basePrice,
+            realTimePrice = item.realTimePrice,
+            desiredPrice = item.desiredPrice,
+            bidCount = item.bidCount,
+            totalBidAmount = item.totalBidAmount,
+            highestBidMemberId = item.highestBidMemberId,
+            auctionStartTime = item.auctionStartTime,
+            auctionEndTime = item.auctionEndTime
+        )
+    }
+}
