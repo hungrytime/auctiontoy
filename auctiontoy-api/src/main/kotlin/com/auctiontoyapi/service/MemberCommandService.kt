@@ -12,7 +12,7 @@ class MemberCommandService(
     private val passwordEncoder: BCryptPasswordEncoder
 ) : SignUpMemberUseCase {
     @Override
-    override fun signUpMember(member: MemberVO) {
-        memberCommandAdapter.signUpMember(MemberVO(member.id, passwordEncoder.encode(member.password), member.name))
+    override fun signUp(member: MemberVO) {
+        memberCommandAdapter.signUp(MemberVO(member.id, passwordEncoder.encode(member.password), member.name))
     }
 }

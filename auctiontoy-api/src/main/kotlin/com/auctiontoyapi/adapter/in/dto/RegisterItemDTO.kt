@@ -20,11 +20,11 @@ data class RegisterItemDTO(
         desiredPrice = desiredPrice,
         auctionStartTime = LocalDateTime.parse(
             auctionStartTime,
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         ),
         auctionEndTime = LocalDateTime.parse(
             auctionEndTime,
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         )
     )
 }

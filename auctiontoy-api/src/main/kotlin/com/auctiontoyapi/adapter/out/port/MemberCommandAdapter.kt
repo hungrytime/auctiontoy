@@ -14,7 +14,7 @@ class MemberCommandAdapter(
     private val memberJpaRepositories: MemberJpaRepository
 ) : SignUpMemberPort{
     @Override
-    override fun signUpMember(member: MemberVO) {
+    override fun signUp(member: MemberVO) {
         try {
             memberJpaRepositories.save(MemberJpaEntity.from(member.to()))
         } catch (e: Exception) {
