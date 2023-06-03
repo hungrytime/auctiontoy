@@ -14,7 +14,7 @@ class MemberCommandController(
     private val signUpMemberUseCase: SignUpMemberUseCase,
     private val findMemberUseCase: FindMemberUseCase
 ) {
-    @PostMapping("/signup")
+    @PostMapping("/sign-up")
     fun join(@RequestBody member: JoinMemberDTO): String {
         val checkExistMember = findMemberUseCase.findMemberByMemberId(member.id)
         if(checkExistMember != null) throw Exception("이미 같은 ID가 존재 합니다. ${member.id}")

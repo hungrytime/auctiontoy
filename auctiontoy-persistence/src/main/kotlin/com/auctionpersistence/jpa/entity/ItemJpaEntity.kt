@@ -25,6 +25,21 @@ class ItemJpaEntity (
     val auctionStartTime: LocalDateTime,
     val auctionEndTime: LocalDateTime
 ) : BaseEntity() {
+
+    fun to() = Item(
+        itemId = this.itemId,
+        memberId = this.memberId,
+        name = this.name,
+        basePrice = this.basePrice,
+        realTimePrice = this.realTimePrice,
+        desiredPrice = this.desiredPrice,
+        bidCount = this.bidCount,
+        totalBidAmount = this.totalBidAmount,
+        highestBidMemberId = this.highestBidMemberId,
+        auctionStartTime = this.auctionStartTime,
+        auctionEndTime = this.auctionEndTime
+    )
+
     companion object {
         fun from(item: Item) = ItemJpaEntity(
             itemId = item.itemId,

@@ -22,4 +22,15 @@ data class ItemVO(
             auctionEndTime = auctionEndTime
         )
     }
+
+    companion object {
+        fun from(item: Item) = ItemVO(
+            memberId = item.memberId,
+            itemName = item.name,
+            basePrice = item.basePrice,
+            desiredPrice = item.desiredPrice,
+            auctionStartTime = item.auctionStartTime,
+            auctionEndTime = item.auctionEndTime
+        )
+    }
 }
