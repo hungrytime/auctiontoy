@@ -5,6 +5,7 @@ import java.math.BigDecimal
 import java.time.LocalDateTime
 
 data class ItemInfoDTO(
+    val highestBidMemberId: Long?,
     val itemName: String,
     val basePrice: BigDecimal,
     val desiredPrice: BigDecimal,
@@ -13,6 +14,7 @@ data class ItemInfoDTO(
 ) {
     companion object {
         fun from(item: ItemVO) = ItemInfoDTO(
+            highestBidMemberId = item.highestBidMemberId,
             itemName = item.itemName,
             basePrice = item.basePrice,
             desiredPrice = item.desiredPrice,

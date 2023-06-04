@@ -1,5 +1,6 @@
 package com.auctiontoydomain.entity
 
+import com.auctiontoydomain.MemberStatus
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
@@ -7,6 +8,7 @@ data class Item (
     val itemId: Long? = null,
     val memberId: Long,
     val name: String,
+    val memberStatus: ItemStatus = ItemStatus.PREPARE_AUCTION,
     val basePrice: BigDecimal,
     val realTimePrice: BigDecimal,
     val desiredPrice: BigDecimal,

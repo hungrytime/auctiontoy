@@ -17,11 +17,7 @@ class MemberJpaEntity (
     val name: String,
 
     @Enumerated(EnumType.STRING)
-    val memberStatus: MemberStatus = MemberStatus.ACTIVATED,
-
-    @OneToMany
-    @JoinColumn(name = "memberId", insertable = false, updatable = false)
-    val items: List<ItemJpaEntity> = listOf()
+    val memberStatus: MemberStatus = MemberStatus.ACTIVATED
 
 ) : BaseEntity() {
     companion object {

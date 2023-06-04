@@ -1,7 +1,9 @@
 package com.auctionpersistence.jpa.entity
 
 import com.auctionpersistence.jpa.entity.base.BaseEntity
+import com.auctiontoydomain.MemberStatus
 import com.auctiontoydomain.entity.Item
+import com.auctiontoydomain.entity.ItemStatus
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import javax.persistence.*
@@ -16,6 +18,9 @@ class ItemJpaEntity (
     // 상품을 올린 멤버ID
     val memberId: Long,
     val name: String,
+    @Enumerated(EnumType.STRING)
+    val itemStatus: ItemStatus = ItemStatus.PREPARE_AUCTION,
+
     val basePrice: BigDecimal,
     val realTimePrice: BigDecimal,
     val desiredPrice: BigDecimal,

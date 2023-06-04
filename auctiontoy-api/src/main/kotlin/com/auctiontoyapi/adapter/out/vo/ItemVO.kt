@@ -6,6 +6,7 @@ import java.time.LocalDateTime
 
 data class ItemVO(
     val memberId: Long,
+    val highestBidMemberId: Long? = null,
     val itemName: String,
     val basePrice: BigDecimal,
     val desiredPrice: BigDecimal,
@@ -26,6 +27,7 @@ data class ItemVO(
     companion object {
         fun from(item: Item) = ItemVO(
             memberId = item.memberId,
+            highestBidMemberId = item.highestBidMemberId,
             itemName = item.name,
             basePrice = item.basePrice,
             desiredPrice = item.desiredPrice,
