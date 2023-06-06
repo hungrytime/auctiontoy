@@ -24,5 +24,10 @@ class ItemInquiryAdapter(
         ).map { it.to() }
     }
 
-
+    override fun findByItemStatusAndEndDate(status: String): List<Item> {
+        return itemJpaRepository.findByItemStatusAndEndDate(
+            ItemStatus.valueOf(status),
+            LocalDateTime.now()
+        ).map { it.to() }
+    }
 }

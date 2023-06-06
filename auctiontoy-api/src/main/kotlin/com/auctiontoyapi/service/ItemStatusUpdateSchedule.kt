@@ -21,7 +21,7 @@ class ItemStatusUpdateSchedule(
 
     @Scheduled(cron = "0 0 0/1 * * *")
     fun updateActiveToEnd() {
-        val itemList = itemInquiryAdapter.findByItemStatusAndStartDate("ACTIVE_AUCTION")
+        val itemList = itemInquiryAdapter.findByItemStatusAndEndDate("ACTIVE_AUCTION")
         itemList.map { it.makeEndStatus() }
         itemCommandAdapter.saveAll(itemList)
     }

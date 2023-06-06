@@ -21,4 +21,11 @@ class ItemJpaRepositoryImpl : QuerydslRepositorySupport(ItemJpaEntity::class.jav
                 .and(itemJpaEntity.itemStatus.eq(status)))
                 .fetch()
     }
+
+    override fun findByItemStatusAndEndDate(status: ItemStatus, targetTime: LocalDateTime): List<ItemJpaEntity> {
+        return from(itemJpaEntity)
+            .where(itemJpaEntity.auctionEndTime.loe(targetTime)
+                .and(itemJpaEntity.itemStatus.eq(status)))
+            .fetch()
+    }
 }
