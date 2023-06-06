@@ -1,6 +1,7 @@
 package com.auctiontoyapi.adapter.`in`.port
 
 import com.auctiontoyapi.adapter.`in`.common.dto.ResponseDTO
+import com.auctiontoyapi.adapter.`in`.dto.BidItemDTO
 import com.auctiontoyapi.adapter.`in`.dto.RegisterItemDTO
 import com.auctiontoyapi.application.port.`in`.BidItemUseCase
 import com.auctiontoyapi.application.port.`in`.RegisterItemUseCase
@@ -17,6 +18,11 @@ class ItemCommandController(
         itemUseCase.register(item.to())
         return "OK"
     }
+
+//    @PostMapping("/bid")
+//    fun bidItem(@RequestBody item: BidItemDTO): String {
+//
+//    }
 
     @PostMapping("/produce")
     fun produce(@RequestParam msg: String): String {

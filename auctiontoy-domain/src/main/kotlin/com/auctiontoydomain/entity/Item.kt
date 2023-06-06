@@ -9,7 +9,7 @@ data class Item (
     val name: String,
     var itemStatus: ItemStatus = ItemStatus.PREPARE_AUCTION,
     val basePrice: BigDecimal,
-    val realTimePrice: BigDecimal,
+    var realTimePrice: BigDecimal,
     val desiredPrice: BigDecimal,
     val bidCount: Long,
     val totalBidAmount: BigDecimal,
@@ -20,6 +20,14 @@ data class Item (
     fun makeActiveStatus() { itemStatus = ItemStatus.ACTIVE_AUCTION }
 
     fun makeEndStatus() { itemStatus = ItemStatus.END_AUCTION }
+
+    fun checkValidPrice(tryBidPrice: BigDecimal): Boolean {
+        return tryBidPrice > realTimePrice
+    }
+
+    fun changeRealTimePrice(realTimePrice: BigDecimal) {
+        this.realTimePrice = realTimePrice
+    }
 
     companion object {
         fun makeItem(

@@ -30,4 +30,10 @@ class ItemInquiryAdapter(
             LocalDateTime.now()
         ).map { it.to() }
     }
+
+    override fun findItemByItemId(itemId: Long): Item? {
+        val item = itemJpaRepository.findById(itemId)
+        if (item.isPresent) return item.get().to()
+        return null
+    }
 }
