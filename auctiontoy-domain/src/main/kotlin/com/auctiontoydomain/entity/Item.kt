@@ -1,6 +1,5 @@
 package com.auctiontoydomain.entity
 
-import com.auctiontoydomain.MemberStatus
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
@@ -8,7 +7,7 @@ data class Item (
     val itemId: Long? = null,
     val memberId: Long,
     val name: String,
-    val memberStatus: ItemStatus = ItemStatus.PREPARE_AUCTION,
+    var itemStatus: ItemStatus = ItemStatus.PREPARE_AUCTION,
     val basePrice: BigDecimal,
     val realTimePrice: BigDecimal,
     val desiredPrice: BigDecimal,
@@ -18,6 +17,10 @@ data class Item (
     val auctionStartTime: LocalDateTime,
     val auctionEndTime: LocalDateTime
 ) {
+    fun makeActiveStatus() { itemStatus = ItemStatus.ACTIVE_AUCTION }
+
+    fun makeEndStatus() { itemStatus = ItemStatus.END_AUCTION }
+
     companion object {
         fun makeItem(
             memberId: Long,
@@ -43,6 +46,6 @@ data class Item (
 
 enum class ItemStatus {
     PREPARE_AUCTION,
-    AUCTION,
+    ACTIVE_AUCTION,
     END_AUCTION
 }

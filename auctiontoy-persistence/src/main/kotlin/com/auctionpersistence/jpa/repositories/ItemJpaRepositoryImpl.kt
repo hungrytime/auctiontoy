@@ -2,8 +2,10 @@ package com.auctionpersistence.jpa.repositories
 
 import com.auctionpersistence.jpa.entity.ItemJpaEntity
 import com.auctionpersistence.jpa.entity.QItemJpaEntity.itemJpaEntity
+import com.auctiontoydomain.entity.ItemStatus
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import org.springframework.stereotype.Repository
+import java.time.LocalDateTime
 
 @Repository
 class ItemJpaRepositoryImpl : QuerydslRepositorySupport(ItemJpaEntity::class.java), ItemJpaRepositoryCustom {
@@ -11,5 +13,12 @@ class ItemJpaRepositoryImpl : QuerydslRepositorySupport(ItemJpaEntity::class.jav
         return from(itemJpaEntity)
             .where(itemJpaEntity.memberId.eq(memberId))
             .fetch()
+    }
+
+    override fun findByItemStatusAndStartDate(status: ItemStatus, targetTime: LocalDateTime): List<ItemJpaEntity> {
+        return from(itemJpaEntity)
+            .where(itemJpaEntity.auctionStartTime.loe(targetTime)
+                .and(itemJpaEntity.itemStatus.eq(status)))
+                .fetch()
     }
 }
