@@ -6,16 +6,16 @@ import java.time.LocalDateTime
 data class Item (
     val itemId: Long? = null,
     val memberId: Long,
-    val name: String,
+    var name: String,
     var itemStatus: ItemStatus = ItemStatus.PREPARE_AUCTION,
-    val basePrice: BigDecimal,
+    var basePrice: BigDecimal,
     var realTimePrice: BigDecimal,
-    val desiredPrice: BigDecimal,
+    var desiredPrice: BigDecimal,
     val bidCount: Long,
     val totalBidAmount: BigDecimal,
     val highestBidMemberId: Long? = null,
-    val auctionStartTime: LocalDateTime,
-    val auctionEndTime: LocalDateTime
+    var auctionStartTime: LocalDateTime,
+    var auctionEndTime: LocalDateTime
 ) {
     fun makeActiveStatus() { itemStatus = ItemStatus.ACTIVE_AUCTION }
 
@@ -27,6 +27,20 @@ data class Item (
 
     fun changeRealTimePrice(realTimePrice: BigDecimal) {
         this.realTimePrice = realTimePrice
+    }
+
+    fun modifyItem(
+        itemName: String,
+        basePrice: BigDecimal,
+        desiredPrice: BigDecimal,
+        auctionStartTime: LocalDateTime,
+        auctionEndTime: LocalDateTime
+    ) {
+        this.name = itemName
+        this.basePrice = basePrice
+        this.desiredPrice = desiredPrice
+        this.auctionStartTime = auctionStartTime
+        this.auctionEndTime = auctionEndTime
     }
 
     companion object {

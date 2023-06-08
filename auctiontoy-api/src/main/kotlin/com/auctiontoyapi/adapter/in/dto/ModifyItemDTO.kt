@@ -1,20 +1,20 @@
 package com.auctiontoyapi.adapter.`in`.dto
 
-import com.auctiontoyapi.adapter.out.vo.ItemVO
+import com.auctiontoyapi.adapter.out.vo.ItemModifyVO
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-data class RegisterItemDTO(
-    val memberId: Long,
+data class ModifyItemDTO(
+    val itemId: Long,
     val itemName: String,
     val basePrice: BigDecimal,
     val desiredPrice: BigDecimal,
     val auctionStartTime: String,
     val auctionEndTime: String
 ) {
-    fun toVO() = ItemVO(
-        memberId = memberId,
+    fun toVO() = ItemModifyVO(
+        itemId = itemId,
         itemName = itemName,
         basePrice = basePrice,
         desiredPrice = desiredPrice,

@@ -8,7 +8,7 @@ data class BidItemDTO(
     val memberId: Long,
     val itemPrice: BigDecimal
 ) {
-    fun to() = BidItemVO(
+    fun toVO() = BidItemVO(
         itemId = itemId,
         memberId = memberId,
         itemPrice = itemPrice

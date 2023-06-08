@@ -11,7 +11,7 @@ dependencies {
     implementation ("mysql:mysql-connector-java")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 //    implementation("org.redisson:redisson-spring-boot-starter:3.19.1")
-//    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
     api("org.springframework.boot:spring-boot-starter-data-jpa")
     api("com.querydsl:querydsl-jpa:4.2.2")
     kapt("com.querydsl:querydsl-apt:4.2.2:jpa")

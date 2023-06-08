@@ -21,3 +21,10 @@ auction:
     username: root
     password: "test1234"
     read-only: false
+
+
+redis:
+  time-to-live: 3600
+  cache-null-values: true
+  host: localhost
+  port: 6379

@@ -7,7 +7,7 @@ data class JoinMemberDTO(
     val password: String,
     val name: String
 ) {
-    fun to() = MemberVO(
+    fun toVO() = MemberVO(
         id = id,
         password = password,
         name = name

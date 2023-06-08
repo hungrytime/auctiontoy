@@ -6,9 +6,13 @@ data class Member(
     val password: String,
     val name: String,
     //기본 ACTIVATED로 하고 탈퇴시 REVOKED로 변경
-    val memberStatus: MemberStatus = MemberStatus.ACTIVATED,
+    var memberStatus: MemberStatus = MemberStatus.ACTIVATED,
     val createdDate: String? = null
-)
+) {
+    fun changeRevoked() {
+        this.memberStatus = MemberStatus.REVOKED
+    }
+}
 
 enum class MemberStatus {
     ACTIVATED,
