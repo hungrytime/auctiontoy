@@ -13,7 +13,7 @@ data class Item (
     var desiredPrice: BigDecimal,
     val bidCount: Long,
     val totalBidAmount: BigDecimal,
-    val highestBidMemberId: Long? = null,
+    var highestBidMemberId: Long? = null,
     var auctionStartTime: LocalDateTime,
     var auctionEndTime: LocalDateTime
 ) {
@@ -25,8 +25,9 @@ data class Item (
         return tryBidPrice > realTimePrice
     }
 
-    fun changeRealTimePrice(realTimePrice: BigDecimal) {
+    fun changeBidItemInfo(realTimePrice: BigDecimal, highestBidMemberId: Long) {
         this.realTimePrice = realTimePrice
+        this.highestBidMemberId = highestBidMemberId
     }
 
     fun modifyItem(

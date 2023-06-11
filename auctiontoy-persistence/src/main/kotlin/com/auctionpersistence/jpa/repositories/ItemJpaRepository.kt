@@ -9,6 +9,7 @@ interface ItemJpaRepository: JpaRepository<ItemJpaEntity, Long>, ItemJpaReposito
 
 interface ItemJpaRepositoryCustom {
     fun findByMemberId(memberId: Long): List<ItemJpaEntity>
+    fun findByIdAndStatus(id: Long, status: ItemStatus): ItemJpaEntity?
     fun findByItemStatusAndStartDate(status: ItemStatus, targetTime: LocalDateTime): List<ItemJpaEntity>
     fun findByItemStatusAndEndDate(status: ItemStatus, targetTime: LocalDateTime): List<ItemJpaEntity>
 }

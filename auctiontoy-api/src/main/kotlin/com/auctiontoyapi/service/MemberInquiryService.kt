@@ -18,7 +18,7 @@ class MemberInquiryService(
     private val jwtTokenProvider: JwtTokenProvider
 ) : FindMemberUseCase {
     override fun findMemberByMemberId(id: String): MemberVO? {
-        val member = findMemberPort.findMemberById(id) ?: return null
+        val member = findMemberPort.findMemberByUserId(id) ?: return null
         return MemberVO.from(member)
     }
 

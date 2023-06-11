@@ -15,6 +15,13 @@ class ItemJpaRepositoryImpl : QuerydslRepositorySupport(ItemJpaEntity::class.jav
             .fetch()
     }
 
+    override fun findByIdAndStatus(id: Long, status: ItemStatus): ItemJpaEntity? {
+        return from(itemJpaEntity)
+            .where(itemJpaEntity.itemId.eq(id)
+                .and(itemJpaEntity.itemStatus.eq(status)))
+            .fetchFirst() ?: null
+    }
+
     override fun findByItemStatusAndStartDate(status: ItemStatus, targetTime: LocalDateTime): List<ItemJpaEntity> {
         return from(itemJpaEntity)
             .where(itemJpaEntity.auctionStartTime.loe(targetTime)

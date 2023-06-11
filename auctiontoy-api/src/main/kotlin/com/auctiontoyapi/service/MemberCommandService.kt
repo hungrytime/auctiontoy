@@ -19,10 +19,13 @@ class MemberCommandService(
         memberCommandAdapter.signUp(MemberVO(member.id, passwordEncoder.encode(member.password), member.name))
     }
 
-    //TODO 로그인 시 탈퇴된 회원인지 확인 필요
-    override fun rovoke(memberId: String) {
-        val member = memberInquiryAdapter.findMemberById(memberId) ?: throw Exception("찾고자하는 멤버가 없습니다 memberId : $memberId")
+    override fun rovoke(id: String) {
+        val member = memberInquiryAdapter.findMemberByUserIdAndStatus(id, REVOKED_MEMBER) ?: throw Exception("찾고자하는 멤버가 없습니다 memberId : $id")
         member.changeRevoked()
         memberCommandAdapter.save(member)
+    }
+
+    companion object {
+        const val REVOKED_MEMBER = "REVOKED"
     }
 }

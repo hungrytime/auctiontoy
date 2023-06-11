@@ -36,4 +36,8 @@ class ItemInquiryAdapter(
         if (item.isPresent) return item.get().to()
         return null
     }
+
+    override fun findItemByItemIdAndStatus(itemId: Long, status: String): Item? {
+        return itemJpaRepository.findByIdAndStatus(itemId, ItemStatus.valueOf(status))?.to()
+    }
 }

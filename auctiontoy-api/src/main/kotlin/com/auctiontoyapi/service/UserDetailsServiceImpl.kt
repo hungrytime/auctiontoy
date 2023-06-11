@@ -11,7 +11,7 @@ class UserDetailsServiceImpl(
     private val memberInquiryAdapter: MemberInquiryAdapter
 ) : UserDetailsService {
     override fun loadUserByUsername(username: String?): UserDetails {
-        val member = memberInquiryAdapter.findMemberById(username!!) ?: throw Exception("ID : $username 멤버가 존재하지 않습니다")
+        val member = memberInquiryAdapter.findMemberByUserId(username!!) ?: throw Exception("ID : $username 멤버가 존재하지 않습니다")
         return UserDetailsImpl(member)
     }
 }
