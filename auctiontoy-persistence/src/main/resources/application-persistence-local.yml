@@ -21,6 +21,9 @@ auction:
     username: root
     password: "test1234"
     read-only: false
+    maximun-pool-size: 3
+    minimun-pool-size: 2
+    idle-timeout: 10000
 
 
 redis:
