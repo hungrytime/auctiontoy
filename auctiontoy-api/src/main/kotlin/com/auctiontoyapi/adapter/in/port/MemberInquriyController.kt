@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*
 class MemberInquriyController(
     private val findMemberUseCase: FindMemberUseCase
 ) {
-    @GetMapping("/signin")
+    @GetMapping("/sign-in")
     fun signIn(@RequestBody member: JoinMemberDTO): ResponseDTO<String> {
         val token = findMemberUseCase.signIn(member.id, member.password)
         return ResponseDTO.success(token)

@@ -12,4 +12,8 @@ class ItemInquiryService(
     override fun findItemListByMemberId(memberId: Long): List<ItemVO> {
         return findItemPort.findItemListByMemberId(memberId).map { ItemVO.from(it) }
     }
+
+    override fun testRedis(key: String): String? {
+        return findItemPort.testRedis(key)
+    }
 }

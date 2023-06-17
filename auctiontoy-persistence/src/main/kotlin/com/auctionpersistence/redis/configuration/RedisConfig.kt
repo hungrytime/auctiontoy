@@ -1,4 +1,4 @@
-package com.auctionpersistence.jpa.configuration
+package com.auctionpersistence.redis.configuration
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean

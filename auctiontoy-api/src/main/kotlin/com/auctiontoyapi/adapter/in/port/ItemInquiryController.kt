@@ -17,4 +17,9 @@ class ItemInquiryController(
     fun getItemList(@RequestParam memberId: Long): ResponseDTO<List<ItemInfoDTO>> {
         return ResponseDTO.success(findItemListUseCase.findItemListByMemberId(memberId).map { ItemInfoDTO.from(it) })
     }
+
+    @GetMapping("/redis")
+    fun getRedis(@RequestParam key: String): ResponseDTO<String?> {
+        return ResponseDTO.success(findItemListUseCase.testRedis(key))
+    }
 }

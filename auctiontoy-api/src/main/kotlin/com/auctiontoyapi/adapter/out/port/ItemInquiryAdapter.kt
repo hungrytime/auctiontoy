@@ -1,17 +1,17 @@
 package com.auctiontoyapi.adapter.out.port
 
 import com.auctionpersistence.jpa.repositories.ItemJpaRepository
+import com.auctionpersistence.redis.service.RedisService
 import com.auctiontoyapi.application.port.out.FindItemPort
-import com.auctiontoyapi.common.toLocalDateTime
 import com.auctiontoydomain.entity.Item
 import com.auctiontoydomain.entity.ItemStatus
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 @Component
 class ItemInquiryAdapter(
-    private val itemJpaRepository: ItemJpaRepository
+    private val itemJpaRepository: ItemJpaRepository,
+    private val redisService: RedisService
 ) : FindItemPort {
     override fun findItemListByMemberId(memberId: Long): List<Item> {
         return itemJpaRepository.findByMemberId(memberId).map { it.to() }
@@ -39,5 +39,9 @@ class ItemInquiryAdapter(
 
     override fun findItemByItemIdAndStatus(itemId: Long, status: String): Item? {
         return itemJpaRepository.findByIdAndStatus(itemId, ItemStatus.valueOf(status))?.to()
+    }
+
+    override fun testRedis(key: String): String? {
+        return redisService.get(key)
     }
 }

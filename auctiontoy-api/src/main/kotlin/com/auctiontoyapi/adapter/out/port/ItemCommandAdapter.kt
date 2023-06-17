@@ -2,9 +2,11 @@ package com.auctiontoyapi.adapter.out.port
 
 import com.auctionpersistence.jpa.entity.ItemJpaEntity
 import com.auctionpersistence.jpa.repositories.ItemJpaRepository
+import com.auctionpersistence.redis.service.RedisService
 import com.auctiontoyapi.adapter.out.vo.ItemVO
 import com.auctiontoyapi.application.port.out.SaveItemPort
 import com.auctiontoydomain.entity.Item
+import mu.KLogging
 import org.springframework.stereotype.Component
 
 /**
@@ -12,7 +14,8 @@ import org.springframework.stereotype.Component
  * */
 @Component
 class ItemCommandAdapter(
-    private val itemJpaRepository: ItemJpaRepository
+    private val itemJpaRepository: ItemJpaRepository,
+    private val redisService: RedisService
 ): SaveItemPort {
     /**
      * 아이템을 저장하는 함수
@@ -30,4 +33,20 @@ class ItemCommandAdapter(
         val itemEntities = items.map {ItemJpaEntity.from(it)}
         itemJpaRepository.saveAll(itemEntities)
     }
+
+    override fun saveRedis(key: String, value: String) {
+        redisService.set(key, value)
+    }
+
+//    override fun lockTest(key: String): Boolean {
+//        logger.info("Locking now key : $key")
+//        return redisService.lock(key) ?: false
+//    }
+//
+//    override fun unlockTest(key: String): Boolean {
+//        logger.info("UnLocking now key : $key")
+//        return redisService.unlock(key)
+//    }
+
+    companion object: KLogging()
 }

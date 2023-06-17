@@ -1,5 +1,6 @@
 package com.auctiontoyapi.service
 
+import com.auctionpersistence.redis.lock.RedisLock
 import com.auctiontoyapi.adapter.out.port.KafkaProducer
 import com.auctiontoyapi.adapter.out.vo.BidItemVO
 import com.auctiontoyapi.adapter.out.vo.ItemModifyVO
@@ -10,7 +11,9 @@ import com.auctiontoyapi.application.port.`in`.RegisterItemUseCase
 import com.auctiontoyapi.application.port.out.FindItemPort
 import com.auctiontoyapi.application.port.out.SaveItemPort
 import com.auctiontoydomain.entity.ItemStatus
+import mu.KLogging
 import org.springframework.stereotype.Service
+import java.lang.Thread.sleep
 
 
 /**
@@ -18,7 +21,7 @@ import org.springframework.stereotype.Service
  * */
 @Service
 class ItemCommandService(
-    private val registerItemPort: SaveItemPort,
+    private val saveItemPort: SaveItemPort,
     private val kafkaProducer: KafkaProducer,
     private val findItemPort: FindItemPort
 ): RegisterItemUseCase, BidItemUseCase, ModifyItemUseCase {
@@ -28,7 +31,7 @@ class ItemCommandService(
      * @param : 아이템을 등록하기 위한 정보
      * */
     override fun register(item: ItemVO) {
-        registerItemPort.save(item.toItem())
+        saveItemPort.save(item.toItem())
     }
 
     override fun tryBid(msg: String) {
@@ -49,7 +52,16 @@ class ItemCommandService(
         if (item.checkValidPrice(tryItem.itemPrice).not()) return
         // 입찰가가 더 큰 경우는 item의 정보값을 바꾼다
         item.changeBidItemInfo(tryItem.itemPrice, tryItem.memberId)
-        registerItemPort.save(item)
+        saveItemPort.save(item)
+    }
+
+    override fun redisTest(key: String, value: String) {
+        saveItemPort.saveRedis(key, value)
+    }
+
+    @RedisLock(key = "key", name = "redisLock")
+    override fun lockTest(key: String) {
+        logger.info("Process lock test $key")
     }
 
     /**
@@ -70,10 +82,10 @@ class ItemCommandService(
             modifyItem.auctionEndTime
         )
 
-        registerItemPort.save(item)
+        saveItemPort.save(item)
     }
 
-    companion object {
+    companion object: KLogging() {
         const val ACTIVE_AUCTION = "ACTIVE_AUCTION"
     }
 }

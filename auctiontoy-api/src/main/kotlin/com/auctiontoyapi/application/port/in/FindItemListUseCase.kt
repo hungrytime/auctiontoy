@@ -4,4 +4,5 @@ import com.auctiontoyapi.adapter.out.vo.ItemVO
 
 interface FindItemListUseCase {
     fun findItemListByMemberId(memberId: Long) : List<ItemVO>
+    fun testRedis(key: String): String?
 }

@@ -1,6 +1,7 @@
 package com.auctiontoyapi
 
 import com.auctionpersistence.jpa.configuration.EnableDataSourceConfiguration
+import com.auctionpersistence.redis.Redis
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan
@@ -10,7 +11,8 @@ import org.springframework.scheduling.annotation.EnableScheduling
 @SpringBootApplication(
     exclude = [
         DataSourceAutoConfiguration::class
-    ]
+    ],
+    scanBasePackageClasses = [Api::class, Redis::class]
 )
 @EnableDataSourceConfiguration
 @ConfigurationPropertiesScan

@@ -57,4 +57,16 @@ class ItemCommandController(
         modifyItemUseCase.modify(item.toVO())
         return ResponseDTO.success()
     }
+
+    @PostMapping("/save-redis")
+    fun redis(@RequestParam key: String, @RequestParam value: String): ResponseDTO<Unit> {
+        bidItemUseCase.redisTest(key, value)
+        return ResponseDTO.success()
+    }
+
+    @PostMapping("/lock")
+    fun lock(@RequestParam key: String): ResponseDTO<Unit>{
+        bidItemUseCase.lockTest(key)
+        return ResponseDTO.success()
+    }
 }

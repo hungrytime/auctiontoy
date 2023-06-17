@@ -22,7 +22,7 @@ class SecurityConfig(
 
         http.csrf().disable()
         http.authorizeRequests()
-            .antMatchers("/member/signup", "/hello", "/member/signin").permitAll()
+            .antMatchers("/member/sign-up", "/hello", "/member/sign-in").permitAll()
             .anyRequest().authenticated()
             .and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
