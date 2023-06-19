@@ -17,14 +17,22 @@ class ItemJpaEntity (
 
     // 상품을 올린 멤버ID
     val memberId: Long,
+    // 상품 이름
     val name: String,
+    // 상품 상태
     @Enumerated(EnumType.STRING)
     val itemStatus: ItemStatus = ItemStatus.PREPARE_AUCTION,
-
+    // 경매 시작 금액
     val basePrice: BigDecimal,
+    // 실시간 경매 금액
     val realTimePrice: BigDecimal,
+    // 최대 경매 금액 (해당 금액과 같거나 더 클 경우 경매 종료)
     val desiredPrice: BigDecimal,
+    // 최소 경매 금액 (해당 금액에 도달 못할 시 경매 실패)
+    val minimumPrice: BigDecimal,
+    // 경매 횟수
     val bidCount: Long,
+    // 최대 입찰 금액의 멤버 ID
     val highestBidMemberId: Long? = null,
     val auctionStartTime: LocalDateTime,
     val auctionEndTime: LocalDateTime
@@ -37,6 +45,7 @@ class ItemJpaEntity (
         basePrice = this.basePrice,
         realTimePrice = this.realTimePrice,
         desiredPrice = this.desiredPrice,
+        minimumPrice = this.minimumPrice,
         bidCount = this.bidCount,
         highestBidMemberId = this.highestBidMemberId,
         auctionStartTime = this.auctionStartTime,
@@ -51,6 +60,7 @@ class ItemJpaEntity (
             basePrice = item.basePrice,
             realTimePrice = item.realTimePrice,
             desiredPrice = item.desiredPrice,
+            minimumPrice = item.minimumPrice,
             bidCount = item.bidCount,
             highestBidMemberId = item.highestBidMemberId,
             auctionStartTime = item.auctionStartTime,

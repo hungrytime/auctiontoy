@@ -16,6 +16,7 @@ data class Item (
     var basePrice: BigDecimal = BigDecimal.ZERO,
     var realTimePrice: BigDecimal = BigDecimal.ZERO,
     var desiredPrice: BigDecimal = BigDecimal.ZERO,
+    val minimumPrice: BigDecimal = BigDecimal.ZERO,
     val bidCount: Long = 0L,
     var highestBidMemberId: Long? = null,
     @JsonDeserialize(using = LocalDateTimeDeserializer::class)
@@ -30,6 +31,7 @@ data class Item (
         0L,
         "",
         ItemStatus.PREPARE_AUCTION,
+        BigDecimal.ZERO,
         BigDecimal.ZERO,
         BigDecimal.ZERO,
         BigDecimal.ZERO,
@@ -72,6 +74,7 @@ data class Item (
             itemName: String,
             basePrice: BigDecimal,
             desiredPrice: BigDecimal,
+            minimumPrice: BigDecimal,
             auctionStartTime: LocalDateTime,
             auctionEndTime: LocalDateTime
         ) = Item(
@@ -80,6 +83,7 @@ data class Item (
             basePrice = basePrice,
             realTimePrice = basePrice,
             desiredPrice = desiredPrice,
+            minimumPrice = minimumPrice,
             bidCount = 0,
             highestBidMemberId = 0L,
             auctionStartTime = auctionStartTime,
@@ -91,6 +95,7 @@ data class Item (
             itemName: String,
             basePrice: BigDecimal,
             desiredPrice: BigDecimal,
+            minimumPrice: BigDecimal,
             auctionStartTime: LocalDateTime,
             auctionEndTime: LocalDateTime
         ) = Item(
@@ -100,6 +105,7 @@ data class Item (
             basePrice = basePrice,
             realTimePrice = basePrice,
             desiredPrice = desiredPrice,
+            minimumPrice = minimumPrice,
             bidCount = 0,
             highestBidMemberId = 0L,
             auctionStartTime = auctionStartTime,
@@ -109,8 +115,8 @@ data class Item (
 }
 
 enum class ItemStatus {
-    PREPARE_AUCTION,
-    ACTIVE_AUCTION,
-    FAILED_AUCTION,
-    END_AUCTION
+    PREPARE_AUCTION,    // 경매 시작 전
+    ACTIVE_AUCTION,     // 경매 중
+    FAILED_AUCTION,     // 경매 실패
+    END_AUCTION         // 경매 종료
 }
