@@ -2,24 +2,21 @@ package com.auctiontoyapi.adapter.`in`.port
 
 import com.auctiontoyapi.adapter.`in`.common.dto.ResponseDTO
 import com.auctiontoyapi.adapter.`in`.dto.ItemInfoDTO
-import com.auctiontoyapi.application.port.`in`.FindItemListUseCase
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import com.auctiontoyapi.application.port.`in`.FindItemUseCase
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/item")
 class ItemInquiryController(
-    private val findItemListUseCase: FindItemListUseCase
+    private val findItemUseCase: FindItemUseCase
 ) {
     @GetMapping("/item-info-list")
     fun getItemList(@RequestParam memberId: Long): ResponseDTO<List<ItemInfoDTO>> {
-        return ResponseDTO.success(findItemListUseCase.findItemListByMemberId(memberId).map { ItemInfoDTO.from(it) })
+        return ResponseDTO.success(findItemUseCase.findItemListByMemberId(memberId).map { ItemInfoDTO.from(it) })
     }
 
-    @GetMapping("/redis")
-    fun getRedis(@RequestParam key: String): ResponseDTO<String?> {
-        return ResponseDTO.success(findItemListUseCase.testRedis(key))
+    @GetMapping("/{itemId}")
+    fun getRedis(@PathVariable itemId: String): ResponseDTO<ItemInfoDTO?> {
+        return ResponseDTO.success(findItemUseCase.findByItemIdInRedis(itemId)?.let { ItemInfoDTO.from(it)} )
     }
 }

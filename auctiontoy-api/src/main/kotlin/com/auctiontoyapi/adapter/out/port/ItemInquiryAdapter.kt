@@ -5,6 +5,7 @@ import com.auctionpersistence.redis.service.RedisService
 import com.auctiontoyapi.application.port.out.FindItemPort
 import com.auctiontoydomain.entity.Item
 import com.auctiontoydomain.entity.ItemStatus
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 
@@ -41,7 +42,8 @@ class ItemInquiryAdapter(
         return itemJpaRepository.findByIdAndStatus(itemId, ItemStatus.valueOf(status))?.to()
     }
 
-    override fun testRedis(key: String): String? {
-        return redisService.get(key)
+    override fun findByItemIdInRedis(key: String): Item? {
+        val result = redisService.getWithItem(key)
+        return result
     }
 }

@@ -59,8 +59,14 @@ class ItemCommandController(
     }
 
     @PostMapping("/save-redis")
-    fun redis(@RequestParam key: String, @RequestParam value: String): ResponseDTO<Unit> {
-        bidItemUseCase.redisTest(key, value)
+    fun redis(@RequestBody item: RegisterItemDTO): ResponseDTO<Unit> {
+        bidItemUseCase.redisTest(item.toVO())
+        return ResponseDTO.success()
+    }
+
+    @PostMapping("/save-redis-s")
+    fun redis(@RequestParam value: String): ResponseDTO<Unit> {
+        bidItemUseCase.redisTestString(value)
         return ResponseDTO.success()
     }
 

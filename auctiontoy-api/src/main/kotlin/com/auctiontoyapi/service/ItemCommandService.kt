@@ -13,11 +13,10 @@ import com.auctiontoyapi.application.port.out.SaveItemPort
 import com.auctiontoydomain.entity.ItemStatus
 import mu.KLogging
 import org.springframework.stereotype.Service
-import java.lang.Thread.sleep
 
 
 /**
- * 컨트롤러로부터 아이템을에 대한 정보를 받아 port에게 등록 혹은 수정을 하도록 하는 서비스
+ * 컨트롤러로부터 아이템을에 대한 정보를 받아 port 에게 등록 혹은 수정을 하도록 하는 서비스
  * */
 @Service
 class ItemCommandService(
@@ -55,8 +54,13 @@ class ItemCommandService(
         saveItemPort.save(item)
     }
 
-    override fun redisTest(key: String, value: String) {
-        saveItemPort.saveRedis(key, value)
+    override fun redisTest(item: ItemVO) {
+        val item2 = item.toItem2()
+        saveItemPort.saveRedisOnlyItem(item2.itemId!!.toString(), item2)
+    }
+
+    override fun redisTestString(value: String) {
+        saveItemPort.saveRedis("stringTest", value)
     }
 
     @RedisLock(key = "key", name = "redisLock")

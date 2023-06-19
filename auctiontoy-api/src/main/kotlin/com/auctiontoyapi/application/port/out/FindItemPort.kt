@@ -8,5 +8,5 @@ interface FindItemPort {
     fun findByItemStatusAndEndDate(status: String): List<Item>
     fun findItemByItemId(itemId: Long): Item?
     fun findItemByItemIdAndStatus(itemId: Long, status: String): Item?
-    fun testRedis(key:String): String?
+    fun findByItemIdInRedis(key: String): Item?
 }

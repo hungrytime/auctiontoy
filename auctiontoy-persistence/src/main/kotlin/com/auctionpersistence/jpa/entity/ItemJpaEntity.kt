@@ -25,7 +25,6 @@ class ItemJpaEntity (
     val realTimePrice: BigDecimal,
     val desiredPrice: BigDecimal,
     val bidCount: Long,
-    val totalBidAmount: BigDecimal,
     val highestBidMemberId: Long? = null,
     val auctionStartTime: LocalDateTime,
     val auctionEndTime: LocalDateTime
@@ -39,7 +38,6 @@ class ItemJpaEntity (
         realTimePrice = this.realTimePrice,
         desiredPrice = this.desiredPrice,
         bidCount = this.bidCount,
-        totalBidAmount = this.totalBidAmount,
         highestBidMemberId = this.highestBidMemberId,
         auctionStartTime = this.auctionStartTime,
         auctionEndTime = this.auctionEndTime
@@ -54,7 +52,6 @@ class ItemJpaEntity (
             realTimePrice = item.realTimePrice,
             desiredPrice = item.desiredPrice,
             bidCount = item.bidCount,
-            totalBidAmount = item.totalBidAmount,
             highestBidMemberId = item.highestBidMemberId,
             auctionStartTime = item.auctionStartTime,
             auctionEndTime = item.auctionEndTime

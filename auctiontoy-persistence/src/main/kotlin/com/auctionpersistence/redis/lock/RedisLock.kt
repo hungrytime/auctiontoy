@@ -37,14 +37,18 @@ class RedisLockAspect(
 
     @Around("lockAnnotation() && @annotation(redisLock)")
     fun around(joinPoint: ProceedingJoinPoint, redisLock: RedisLock): Any? {
-
         val lockName = redisLock.name
         val parameters = getParameterMapByName(joinPoint)
-        val key = parameters[redisLock.key]?.let {it as String} ?: throw Exception("${redisLock.key} 와 일치하는 Parameter 없습니다")
 
-        while(redisService.lock(key, lockName)?.not() != false){
+        require(parameters[redisLock.key] != null) {
+            "parameter 와 일치하는 key 가 존재하지 않습니다 key : $redisLock.key"
+        }
+
+        val key = PREFIX_KEY + parameters[redisLock.key]?.let {it as String}
+
+        while(redisService.lock(key, lockName, WAITING_TIME)?.not() != false){
             logger.info("$key is locked now")
-            sleep(1_000)
+            sleep(SLEEP_TIME)
         }
 
         return try {
@@ -65,6 +69,7 @@ class RedisLockAspect(
         // 파라미터의 값
         val args = joinPoint.args
         val signature = joinPoint.signature as MethodSignature
+        // 메서드 정보
         val method = joinPoint.target.javaClass.getDeclaredMethod(
             signature.method.name,
             *signature.method.parameterTypes
@@ -77,5 +82,9 @@ class RedisLockAspect(
         return parameterMapByName
     }
 
-    companion object : KLogging()
+    companion object : KLogging() {
+        const val WAITING_TIME = 3_000L
+        const val SLEEP_TIME = 1_000L
+        const val PREFIX_KEY = "AUCTION_LOCK_KEY"
+    }
 }

@@ -24,6 +24,17 @@ data class ItemVO(
         )
     }
 
+    fun toItem2(): Item {
+        return Item.makeItem2(
+            memberId = memberId,
+            itemName = itemName,
+            basePrice = basePrice,
+            desiredPrice = desiredPrice,
+            auctionStartTime = auctionStartTime,
+            auctionEndTime = auctionEndTime
+        )
+    }
+
     companion object {
         fun from(item: Item) = ItemVO(
             memberId = item.memberId,
