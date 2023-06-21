@@ -9,6 +9,7 @@ data class ItemVO(
     val highestBidMemberId: Long? = null,
     val itemName: String,
     val basePrice: BigDecimal,
+    val minimumPrice: BigDecimal,
     val desiredPrice: BigDecimal,
     val auctionStartTime: LocalDateTime,
     val auctionEndTime: LocalDateTime
@@ -19,6 +20,7 @@ data class ItemVO(
             itemName = itemName,
             basePrice = basePrice,
             desiredPrice = desiredPrice,
+            minimumPrice = minimumPrice,
             auctionStartTime = auctionStartTime,
             auctionEndTime = auctionEndTime
         )
@@ -30,6 +32,7 @@ data class ItemVO(
             itemName = itemName,
             basePrice = basePrice,
             desiredPrice = desiredPrice,
+            minimumPrice = minimumPrice,
             auctionStartTime = auctionStartTime,
             auctionEndTime = auctionEndTime
         )
@@ -42,6 +45,7 @@ data class ItemVO(
             itemName = item.name,
             basePrice = item.basePrice,
             desiredPrice = item.desiredPrice,
+            minimumPrice = item.minimumPrice,
             auctionStartTime = item.auctionStartTime,
             auctionEndTime = item.auctionEndTime
         )

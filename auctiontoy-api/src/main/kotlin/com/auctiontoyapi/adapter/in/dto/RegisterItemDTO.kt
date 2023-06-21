@@ -10,6 +10,7 @@ data class RegisterItemDTO(
     val itemName: String,
     val basePrice: BigDecimal,
     val desiredPrice: BigDecimal,
+    val minimumPrice: BigDecimal,
     val auctionStartTime: String,
     val auctionEndTime: String
 ) {
@@ -18,6 +19,7 @@ data class RegisterItemDTO(
         itemName = itemName,
         basePrice = basePrice,
         desiredPrice = desiredPrice,
+        minimumPrice = minimumPrice,
         auctionStartTime = LocalDateTime.parse(
             auctionStartTime,
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
