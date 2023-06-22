@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 @Service
 class KafkaConsumer {
 
-    @KafkaListener(topics = ["test1"], groupId = "foo")
+    @KafkaListener(topics = ["endbid"], groupId = "foo")
     fun consumer(message: String) {
         logger.info("consumer : $message")
     }

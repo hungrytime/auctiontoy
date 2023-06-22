@@ -2,7 +2,9 @@ package com.auctiontoyapi.adapter.out.port
 
 import com.auctionpersistence.jpa.entity.MemberJpaEntity
 import com.auctionpersistence.jpa.repositories.MemberJpaRepository
+import com.auctionpersistence.redis.service.RedisService
 import com.auctiontoyapi.adapter.out.vo.MemberVO
+import com.auctiontoyapi.application.port.out.LogoutPort
 import com.auctiontoyapi.application.port.out.SaveMemberPort
 import com.auctiontoyapi.application.port.out.SignUpMemberPort
 import com.auctiontoydomain.Member
@@ -13,8 +15,9 @@ import java.sql.SQLIntegrityConstraintViolationException
 
 @Component
 class MemberCommandAdapter(
-    private val memberJpaRepositories: MemberJpaRepository
-) : SignUpMemberPort, SaveMemberPort{
+    private val memberJpaRepositories: MemberJpaRepository,
+    private val redisService: RedisService
+) : SignUpMemberPort, SaveMemberPort, LogoutPort {
 
     override fun signUp(member: MemberVO) {
         try {
@@ -30,6 +33,10 @@ class MemberCommandAdapter(
     }
 
     companion object: KLogging()
+
+    override fun logout(token: String) {
+        redisService.delete(token)
+    }
 
 
 }

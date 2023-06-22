@@ -1,5 +1,6 @@
 package com.auctiontoyapi.common.jwt
 
+import com.auctionpersistence.redis.service.RedisService
 import mu.KLogging
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
@@ -9,7 +10,8 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 class JwtAuthenticationFilter(
-    private val jwtTokenProvider: JwtTokenProvider
+    private val jwtTokenProvider: JwtTokenProvider,
+    private val redisService: RedisService
 ): OncePerRequestFilter() {
 
     override fun doFilterInternal(
@@ -22,8 +24,8 @@ class JwtAuthenticationFilter(
         // Bearer타입 토큰이 있을 때 가져온다.
         val token = authorizationHeader.substring("Bearer ".length)
 
-        // 토큰 검증
-        if (jwtTokenProvider.validateToken(token)) {
+        // 레디스에 토큰 정보가 있는지 확인 후 토큰 검증
+        if (redisService.get(token) != null && jwtTokenProvider.validateToken(token)) {
             // 검증 성공 로그
             logger.info("토큰 검증 성공")
             val username = jwtTokenProvider.parseUsername(token)

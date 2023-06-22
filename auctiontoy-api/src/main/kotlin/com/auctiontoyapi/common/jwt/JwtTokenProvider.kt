@@ -1,5 +1,6 @@
 package com.auctiontoyapi.common.jwt
 
+import com.auctionpersistence.redis.service.RedisService
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
@@ -15,7 +16,8 @@ import java.util.*
 
 @Component
 class JwtTokenProvider(
-    private val userDetailsService: UserDetailsService
+    private val userDetailsService: UserDetailsService,
+    private val redisService: RedisService
 ) {
     @Value("\${jwt.secret}")
     private val secretKey: String = ""

@@ -1,5 +1,6 @@
 package com.auctiontoyapi.common.config
 
+import com.auctionpersistence.redis.service.RedisService
 import com.auctiontoyapi.common.jwt.JwtAuthenticationFilter
 import com.auctiontoyapi.common.jwt.JwtTokenProvider
 import org.springframework.context.annotation.Bean
@@ -15,7 +16,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
-    private val jwtTokenProvider: JwtTokenProvider
+    private val jwtTokenProvider: JwtTokenProvider,
+    private val redisService: RedisService
 ): WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
@@ -33,7 +35,7 @@ class SecurityConfig(
             .logout()
             .logoutSuccessUrl("/login")
             .and()
-            .addFilterBefore(JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterBefore(JwtAuthenticationFilter(jwtTokenProvider, redisService), UsernamePasswordAuthenticationFilter::class.java)
     }
 
     @Bean

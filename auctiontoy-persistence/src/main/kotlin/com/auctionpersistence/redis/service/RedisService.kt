@@ -9,4 +9,6 @@ interface RedisService {
     fun setWithItem(key: String, item: Item)
     fun lock(key: String, lockName: String, lockTime: Long): Boolean?
     fun unlock(key: String): Boolean
+    fun delete(key: String): Boolean
+
 }
