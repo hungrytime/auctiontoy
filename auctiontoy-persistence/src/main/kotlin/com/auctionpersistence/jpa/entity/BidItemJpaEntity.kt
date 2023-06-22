@@ -5,11 +5,11 @@ import java.math.BigDecimal
 import javax.persistence.*
 
 @Entity
-@Table(name = "item_history")
-class ItemHistoryJpaEntity(
+@Table(name = "bid_items")
+class BidItemJpaEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val itemHistoryId: Long? = null,
+    val bidItemId: Long? = null,
 
     val itemId: Long = 0L,
     val memberId: Long = 0L,

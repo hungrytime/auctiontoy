@@ -17,6 +17,7 @@ data class Item (
     var realTimePrice: BigDecimal = BigDecimal.ZERO,
     var desiredPrice: BigDecimal = BigDecimal.ZERO,
     val minimumPrice: BigDecimal = BigDecimal.ZERO,
+    val bidMyPrice: BigDecimal? = null,
     val bidCount: Long = 0L,
     var highestBidMemberId: Long? = null,
     @JsonDeserialize(using = LocalDateTimeDeserializer::class)
@@ -35,6 +36,7 @@ data class Item (
         BigDecimal.ZERO,
         BigDecimal.ZERO,
         BigDecimal.ZERO,
+        null,
         0L,
         null,
         LocalDateTime.now(),

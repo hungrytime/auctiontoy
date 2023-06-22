@@ -35,13 +35,7 @@ class ItemJpaEntity (
     // 최대 입찰 금액의 멤버 ID
     val highestBidMemberId: Long? = null,
     val auctionStartTime: LocalDateTime,
-    val auctionEndTime: LocalDateTime,
-
-    // 조회 시 History 가 같이 조회가 자주 되기 떄문에 column 에 포함 안되게 Mapping 만 하기 위해서
-    // insertable, updatable false 로 설정하여 매핑
-    @OneToMany
-    @JoinColumn(name = "itemId", insertable = false, updatable = false)
-    val itemHistoryJpaEntitySet: Set<ItemHistoryJpaEntity> = setOf()
+    val auctionEndTime: LocalDateTime
 
 ) : BaseEntity() {
 

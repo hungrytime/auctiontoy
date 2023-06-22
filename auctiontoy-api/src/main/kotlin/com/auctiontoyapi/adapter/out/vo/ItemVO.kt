@@ -11,6 +11,7 @@ data class ItemVO(
     val basePrice: BigDecimal,
     val minimumPrice: BigDecimal,
     val desiredPrice: BigDecimal,
+    val isBidThisItem: Boolean? = null,
     val auctionStartTime: LocalDateTime,
     val auctionEndTime: LocalDateTime
 ) {

@@ -27,10 +27,11 @@ class MemberCommandService(
     }
 
     override fun logout(header: String) {
-        memberCommandAdapter.logout(extractTokenFromHeader(header))
+        memberCommandAdapter.logout(extracBearerTokenFromHeader(header))
     }
 
-    private fun extractTokenFromHeader(header: String): String {
+    // 헤더의 정보에서 bearer 을 제거한 토큰 정보를 찾아내는 메서드
+    private fun extracBearerTokenFromHeader(header: String): String {
         return header.substring("Bearer ".length)
     }
 

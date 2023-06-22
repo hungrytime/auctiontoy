@@ -1,6 +1,6 @@
 package com.auctiontoyapi.adapter.`in`.dto
 
-data class SignMemberDTO(
+data class SignInMemberDTO(
     val id: String,
     val password: String
 )
