@@ -4,6 +4,7 @@ import com.auctiontoydomain.entity.Item
 import java.math.BigDecimal
 
 data class ItemListVO(
+    val itemId: Long,
     val memberId: Long,
     val itemName: String,
     val isBidThisItem: Boolean = false,
@@ -15,6 +16,7 @@ data class ItemListVO(
 ) {
     companion object {
         fun from(item: Item, isBidThisItem: Boolean, priceIBid: BigDecimal) = ItemListVO(
+            itemId = item.itemId!!,
             memberId = item.memberId,
             itemStatus = item.itemStatus.toString(),
             isBidThisItem = isBidThisItem,

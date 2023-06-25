@@ -13,6 +13,12 @@ class MemberInquiryAdapter(
     private val memberJpaRepository: MemberJpaRepository,
     private val redisService: RedisService
 ) : FindMemberPort, SignInMemberPort {
+    override fun findByMemberId(memberId: Long): Member? {
+        val member = memberJpaRepository.findById(memberId)
+        if (member.isPresent) return member.get().to()
+        return null
+    }
+
     override fun findMemberByUserId(id: String): Member? {
         return memberJpaRepository.findByUserId(id)?.to()
     }

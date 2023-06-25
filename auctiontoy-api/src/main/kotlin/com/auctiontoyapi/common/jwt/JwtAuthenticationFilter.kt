@@ -31,7 +31,7 @@ class JwtAuthenticationFilter(
             val username = jwtTokenProvider.parseUsername(token)
             // username으로 AuthenticationToken 생성
             val authentication: Authentication = jwtTokenProvider.getAuthentication(username)
-            // 생SecurityContext에 등록
+            // SecurityContext에 등록
             SecurityContextHolder.getContext().authentication = authentication
         } else {
             // 검증 실패 로그

@@ -4,7 +4,7 @@ import com.auctiontoyapi.adapter.out.vo.BidItemVO
 import com.auctiontoyapi.adapter.out.vo.ItemVO
 
 interface BidItemUseCase {
-    fun tryBid(msg: String)
+    fun tryBid(msg: BidItemVO)
     fun bid(tryItem: BidItemVO)
     fun redisTest(item: ItemVO)
     fun redisTestString(value: String)

@@ -32,7 +32,7 @@ class ItemCommandController(
 
     @PostMapping("/produce")
     fun produce(@RequestParam msg: String): String {
-        bidItemUseCase.tryBid(msg)
+//        bidItemUseCase.tryBid(msg)
         return "OK"
     }
 
@@ -43,7 +43,7 @@ class ItemCommandController(
      * */
     @PostMapping("/bid")
     fun bid(@RequestBody item: BidItemDTO): ResponseDTO<Unit> {
-        bidItemUseCase.bid(item.toVO())
+        bidItemUseCase.tryBid(item.toVO())
         return ResponseDTO.success()
     }
 

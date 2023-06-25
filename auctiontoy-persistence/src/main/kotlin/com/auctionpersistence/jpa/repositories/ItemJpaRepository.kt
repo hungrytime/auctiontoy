@@ -11,6 +11,7 @@ interface ItemJpaRepository: JpaRepository<ItemJpaEntity, Long>, ItemJpaReposito
 
 interface ItemJpaRepositoryCustom {
     fun findAllWithPage(pageable: Pageable): Page<ItemJpaEntity>
+    fun findItemByMemberIdWithPage(memberId: Long, pageable: Pageable): Page<ItemJpaEntity>
     fun findByCreatedAt(start: LocalDateTime, end: LocalDateTime, pageable: Pageable): Page<ItemJpaEntity>
     fun findByStatus(status: ItemStatus, pageable: Pageable): Page<ItemJpaEntity>
     fun findByMemberId(memberId: Long): List<ItemJpaEntity>

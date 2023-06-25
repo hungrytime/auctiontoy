@@ -33,7 +33,7 @@ class ItemJpaEntity (
     // 경매 횟수
     val bidCount: Long,
     // 최대 입찰 금액의 멤버 ID
-    val highestBidMemberId: Long? = null,
+    val highestBidMemberName: String? = null,
     val auctionStartTime: LocalDateTime,
     val auctionEndTime: LocalDateTime
 
@@ -43,12 +43,13 @@ class ItemJpaEntity (
         itemId = this.itemId,
         memberId = this.memberId,
         name = this.name,
+        itemStatus = this.itemStatus,
         basePrice = this.basePrice,
         realTimePrice = this.realTimePrice,
         desiredPrice = this.desiredPrice,
         minimumPrice = this.minimumPrice,
         bidCount = this.bidCount,
-        highestBidMemberId = this.highestBidMemberId,
+        highestBidMemberName = this.highestBidMemberName,
         auctionStartTime = this.auctionStartTime,
         auctionEndTime = this.auctionEndTime
     )
@@ -58,12 +59,13 @@ class ItemJpaEntity (
             itemId = item.itemId,
             memberId = item.memberId,
             name = item.name,
+            itemStatus = item.itemStatus,
             basePrice = item.basePrice,
             realTimePrice = item.realTimePrice,
             desiredPrice = item.desiredPrice,
             minimumPrice = item.minimumPrice,
             bidCount = item.bidCount,
-            highestBidMemberId = item.highestBidMemberId,
+            highestBidMemberName = item.highestBidMemberName,
             auctionStartTime = item.auctionStartTime,
             auctionEndTime = item.auctionEndTime
         )

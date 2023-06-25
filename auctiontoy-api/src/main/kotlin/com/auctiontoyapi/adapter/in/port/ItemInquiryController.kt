@@ -3,9 +3,7 @@ package com.auctiontoyapi.adapter.`in`.port
 import com.auctiontoyapi.adapter.`in`.common.dto.PageResponseDTO
 import com.auctiontoyapi.adapter.`in`.common.dto.ResponseDTO
 import com.auctiontoyapi.adapter.`in`.common.page.PageParam
-import com.auctiontoyapi.adapter.`in`.dto.ItemInfoDTO
-import com.auctiontoyapi.adapter.`in`.dto.ItemListDTO
-import com.auctiontoyapi.adapter.`in`.dto.SearchDateDTO
+import com.auctiontoyapi.adapter.`in`.dto.*
 import com.auctiontoyapi.application.port.`in`.FindItemUseCase
 import org.springframework.data.domain.PageRequest
 import org.springframework.web.bind.annotation.*
@@ -15,42 +13,93 @@ import org.springframework.web.bind.annotation.*
 class ItemInquiryController(
     private val findItemUseCase: FindItemUseCase
 ) {
+
     /**
-     * 상품의 기본 정보를 조회하는 메서드
+     * 판매자 뷰에서 상품 리스트의 기본 정보를 조회하는 메서드
+     * @param : 멤버 아이디
      * @return : 상품의 정보
      * */
-    @GetMapping("/info-list")
-    fun getItemList(@ModelAttribute pageParam: PageParam): PageResponseDTO<List<ItemListDTO>> {
-        val itemList = findItemUseCase.findItemList(PageRequest.of(pageParam.page, pageParam.size))
-        return PageResponseDTO.success(itemList.first.map { ItemListDTO.from(it) }, itemList.second, itemList.third)
+    @GetMapping("/seller")
+    fun getSellerItemList(
+        @RequestParam memberId: Long,
+        @ModelAttribute pageParam: PageParam
+    ): PageResponseDTO<List<SellerItemListDTO>> {
+        val itemList = findItemUseCase.findItemListForSeller(memberId, PageRequest.of(pageParam.page, pageParam.size))
+        return PageResponseDTO.success(itemList.contents.map { SellerItemListDTO.from(it) }, itemList.page, itemList.totalPage)
     }
 
-    @GetMapping("/createdAt")
-    fun getItemListByCreatedAt(@RequestBody date: SearchDateDTO, @ModelAttribute pageParam: PageParam): PageResponseDTO<List<ItemListDTO>> {
+    /**
+     * 판매자 뷰에서 상품의 기본 정보를 조회하는 메서드
+     * @param : 상품 아이디
+     * @return : 상품의 정보
+     * */
+    @GetMapping("/seller/detail/{itemId}")
+    fun getSellerItemDetail(
+        @PathVariable itemId: Long
+    ): ResponseDTO<SellerItemDetailDTO> {
+        return ResponseDTO.success(SellerItemDetailDTO.from(findItemUseCase.findItemDetailForSeller(itemId)))
+    }
+
+
+
+    /**
+     * 참가자 뷰에서 상품의 기본 정보를 조회하는 메서드
+     * @return : 상품의 정보
+     * */
+    @GetMapping("/participant")
+    fun getItemList(@RequestParam memberId: Long, @ModelAttribute pageParam: PageParam): PageResponseDTO<List<ItemListDTO>> {
+        val itemList = findItemUseCase.findItemList(memberId, PageRequest.of(pageParam.page, pageParam.size))
+        return PageResponseDTO.success(itemList.contents.map { ItemListDTO.from(it) }, itemList.page, itemList.totalPage)
+    }
+
+    /**
+     * 참가자 뷰에서 상품 등록 날짜를 기준으로 검색하는 메서드
+     * @param : page 정보와 검색할 날짜의 사작과 끝을 받는다
+     * @return : 상품의 정보
+     * */
+    @GetMapping("/participant/createdAt")
+    fun getItemListByCreatedAt(@RequestBody form: SearchDateWithPageDTO): PageResponseDTO<List<ItemListDTO>> {
         val itemList = findItemUseCase.findItemListByCreatedAt(
-            date.start,
-            date.end,
-            PageRequest.of(pageParam.page, pageParam.size)
+            form.memberId,
+            form.startDate,
+            form.endDate,
+            PageRequest.of(form.page, form.size)
         )
 
-        return PageResponseDTO.success(itemList.first.map { ItemListDTO.from(it) }, itemList.second, itemList.third)
+        return PageResponseDTO.success(itemList.contents.map { ItemListDTO.from(it) }, itemList.page, itemList.totalPage)
     }
 
-    @GetMapping("/status")
-    fun getItemListByCreatedAt(@RequestParam status: String, @ModelAttribute pageParam: PageParam): PageResponseDTO<List<ItemListDTO>> {
-        val itemList = findItemUseCase.findItemListByStatus(status, PageRequest.of(pageParam.page, pageParam.size))
+    /**
+     * 상품의 상태에 따라 검색하는 메서드
+     * @param : page 정보와 상품의 상태를 받는다
+     * @return : 상품의 정보
+     * */
+    @GetMapping("/participant/status")
+    fun getItemListByCreatedAt(@RequestParam memberId: Long, @RequestParam status: String, @ModelAttribute pageParam: PageParam): PageResponseDTO<List<ItemListDTO>> {
+        val itemList =
+            findItemUseCase.findItemListByStatus(memberId, status, PageRequest.of(pageParam.page, pageParam.size))
 
-        return PageResponseDTO.success(itemList.first.map { ItemListDTO.from(it) }, itemList.second, itemList.third)
+        return PageResponseDTO.success(itemList.contents.map { ItemListDTO.from(it) }, itemList.page, itemList.totalPage)
     }
 
-    @GetMapping("/memberId")
+    /**
+     * 내가 참여중인 경매에 대한 정보
+     * @param : 페이지 정보와 멤버 아이디
+     * @return : 상품의 정보
+     * */
+    @GetMapping("/participanting")
     fun getItemListByMemberId(@RequestParam memberId: Long, @ModelAttribute pageParam: PageParam): PageResponseDTO<List<ItemListDTO>> {
         val itemList = findItemUseCase.findItemListByMemberId(memberId, PageRequest.of(pageParam.page, pageParam.size))
 
-        return PageResponseDTO.success(itemList.first.map { ItemListDTO.from(it) }, itemList.second, itemList.third)
+        return PageResponseDTO.success(itemList.contents.map { ItemListDTO.from(it) }, itemList.page, itemList.totalPage)
     }
 
-    @GetMapping("/{itemId}")
+    /**
+     * 상품의 상제 정보 조회 메서드
+     * @param : 상품의 ID
+     * @return : 상품의 상세정보
+     * */
+    @GetMapping("/participant/{itemId}")
     fun getRedis(@PathVariable itemId: String): ResponseDTO<ItemInfoDTO?> {
         return ResponseDTO.success(findItemUseCase.findByItemId(itemId)?.let { ItemInfoDTO.from(it)} )
     }

@@ -1,6 +1,7 @@
 package com.auctiontoyapi.adapter.`in`.dto
 
 import com.auctiontoyapi.adapter.out.vo.ItemVO
+import com.auctiontoydomain.entity.ItemStatus
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -17,6 +18,9 @@ data class RegisterItemDTO(
     fun toVO() = ItemVO(
         memberId = memberId,
         itemName = itemName,
+        itemStatus = ItemStatus.PREPARE_AUCTION.toString(),
+        bidCount = 0L,
+        realTimePrice = BigDecimal.ZERO,
         basePrice = basePrice,
         desiredPrice = desiredPrice,
         minimumPrice = minimumPrice,

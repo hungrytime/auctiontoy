@@ -22,6 +22,17 @@ class ItemJpaRepositoryImpl : QuerydslRepositorySupport(ItemJpaEntity::class.jav
             }
     }
 
+    override fun findItemByMemberIdWithPage(memberId: Long, pageable: Pageable): Page<ItemJpaEntity> {
+        return from(itemJpaEntity)
+            .where(itemJpaEntity.memberId.eq(memberId))
+            .offset(pageable.offset)
+            .limit(pageable.pageSize.toLong())
+            .fetchResults()
+            .let {
+                PageImpl(it.results, pageable, it.total)
+            }
+    }
+
     override fun findByCreatedAt(start: LocalDateTime, end: LocalDateTime, pageable: Pageable): Page<ItemJpaEntity> {
         return from(itemJpaEntity)
             .where(itemJpaEntity.createdAt.goe(start)

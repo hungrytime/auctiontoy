@@ -1,5 +1,6 @@
 package com.auctiontoyapi.adapter.out.vo
 
+import com.auctionpersistence.jpa.entity.BidItemJpaEntity
 import java.math.BigDecimal
 
 /**
@@ -12,4 +13,12 @@ data class BidItemVO(
     val memberId: Long,
     // 상품 가격
     val itemPrice: BigDecimal
-)
+) {
+    companion object {
+        fun from(bidItem: BidItemJpaEntity) = BidItemVO(
+            itemId = bidItem.itemId,
+            memberId = bidItem.memberId,
+            itemPrice = bidItem.itemPrice
+        )
+    }
+}

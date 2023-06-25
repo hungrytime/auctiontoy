@@ -10,16 +10,14 @@ import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import org.springframework.stereotype.Repository
-import java.math.BigDecimal
 
 @Repository
 class BidItemJpaRepositoryImpl : QuerydslRepositorySupport(BidItemJpaEntity::class.java), BidItemJpaRepositoryCustom {
-    override fun findBidItemByMemberIdAndItemId(memberId: Long, itemId: Long): BigDecimal? {
+    override fun findBidItemByMemberIdAndItemIds(memberId: Long, itemId: List<Long>): List<BidItemJpaEntity> {
         return from(bidItemJpaEntity)
             .where(bidItemJpaEntity.memberId.eq(memberId)
-            .and(bidItemJpaEntity.itemId.eq(itemId)))
-            .select(bidItemJpaEntity.itemPrice)
-            .fetchFirst() ?: null
+            .and(bidItemJpaEntity.itemId.`in`(itemId)))
+            .fetch()
     }
 
     override fun findBidItemByMemberId(memberId: Long, pageable: Pageable): Page<Item> {
@@ -38,9 +36,11 @@ class BidItemJpaRepositoryImpl : QuerydslRepositorySupport(BidItemJpaEntity::cla
                     itemJpaEntity.desiredPrice,
                     itemJpaEntity.minimumPrice,
                     bidItemJpaEntity.itemPrice,
-                    itemJpaEntity.highestBidMemberId,
+                    itemJpaEntity.bidCount,
+                    itemJpaEntity.highestBidMemberName,
                     itemJpaEntity.auctionStartTime,
-                    itemJpaEntity.auctionEndTime
+                    itemJpaEntity.auctionEndTime,
+                    bidItemJpaEntity.createdAt
                 )
 
             )

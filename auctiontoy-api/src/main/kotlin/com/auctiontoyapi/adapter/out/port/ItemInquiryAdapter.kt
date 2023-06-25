@@ -3,6 +3,7 @@ package com.auctiontoyapi.adapter.out.port
 import com.auctionpersistence.jpa.repositories.BidItemJpaRepository
 import com.auctionpersistence.jpa.repositories.ItemJpaRepository
 import com.auctionpersistence.redis.service.RedisService
+import com.auctiontoyapi.adapter.out.vo.BidItemVO
 import com.auctiontoyapi.application.port.out.FindItemPort
 import com.auctiontoyapi.common.toLocalDateTime
 import com.auctiontoydomain.entity.Item
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Component
 import java.math.BigDecimal
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Component
 class ItemInquiryAdapter(
@@ -20,22 +22,32 @@ class ItemInquiryAdapter(
     private val redisService: RedisService
 ) : FindItemPort {
     override fun findItemList(pageable: Pageable): Page<Item> {
-        return itemJpaRepository.findAllWithPage(pageable).map { it.to() }
+        val entity =  itemJpaRepository.findAllWithPage(pageable)
+        return entity.map { it.to() }
     }
 
-    override fun findParticipationBid(memberId: Long, itemId: Long): BigDecimal? {
-        return bidItemJpaRepository.findBidItemByMemberIdAndItemId(memberId, itemId)
+    override fun findItemListByMemberId(memberId: Long, pageable: Pageable): Page<Item> {
+        val entity =  itemJpaRepository.findItemByMemberIdWithPage(memberId, pageable)
+        return entity.map { it.to() }
+    }
+
+    override fun findParticipationBid(memberId: Long, itemIds: List<Long>): List<BidItemVO> {
+        return bidItemJpaRepository.findBidItemByMemberIdAndItemIds(memberId, itemIds).map { BidItemVO.from (it) }
     }
 
     override fun findItemListByCreatedAt(start: String, end: String, pageable: Pageable): Page<Item> {
-        return itemJpaRepository.findByCreatedAt(start.toLocalDateTime(), end.toLocalDateTime(), pageable).map { it.to() }
+        return itemJpaRepository.findByCreatedAt(
+            start.toLocalDateTime(baseDateTimeFormatter),
+            end.toLocalDateTime(baseDateTimeFormatter),
+            pageable
+        ).map { it.to() }
     }
 
     override fun findItemListByStatus(status: String, pageable: Pageable): Page<Item> {
         return itemJpaRepository.findByStatus(ItemStatus.valueOf(status), pageable).map { it.to() }
     }
 
-    override fun findItemListByMemberId(memberId: Long, pageable: Pageable): Page<Item> {
+    override fun findBidItemListByMemberId(memberId: Long, pageable: Pageable): Page<Item> {
         return bidItemJpaRepository.findBidItemByMemberId(memberId, pageable)
     }
 
@@ -66,5 +78,10 @@ class ItemInquiryAdapter(
     override fun findByItemIdInRedis(key: String): Item? {
         val result = redisService.getWithItem(key)
         return result
+    }
+
+    //TODO 이름 바꾸자
+    companion object {
+        val baseDateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
     }
 }

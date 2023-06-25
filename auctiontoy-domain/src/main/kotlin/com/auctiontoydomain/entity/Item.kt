@@ -16,33 +16,18 @@ data class Item (
     var basePrice: BigDecimal = BigDecimal.ZERO,
     var realTimePrice: BigDecimal = BigDecimal.ZERO,
     var desiredPrice: BigDecimal = BigDecimal.ZERO,
-    val minimumPrice: BigDecimal = BigDecimal.ZERO,
+    var minimumPrice: BigDecimal = BigDecimal.ZERO,
     val bidMyPrice: BigDecimal? = null,
-    val bidCount: Long = 0L,
-    var highestBidMemberId: Long? = null,
+    var bidCount: Long = 0L,
+    var highestBidMemberName: String? = null,
     @JsonDeserialize(using = LocalDateTimeDeserializer::class)
     @JsonSerialize(using = LocalDateTimeSerializer::class)
     var auctionStartTime: LocalDateTime = LocalDateTime.now(),
     @JsonDeserialize(using = LocalDateTimeDeserializer::class)
     @JsonSerialize(using = LocalDateTimeSerializer::class)
-    var auctionEndTime: LocalDateTime = LocalDateTime.now()
+    var auctionEndTime: LocalDateTime = LocalDateTime.now(),
+    val lastBidTime: LocalDateTime? = null
 ) {
-    constructor() : this(
-        null,
-        0L,
-        "",
-        ItemStatus.PREPARE_AUCTION,
-        BigDecimal.ZERO,
-        BigDecimal.ZERO,
-        BigDecimal.ZERO,
-        BigDecimal.ZERO,
-        null,
-        0L,
-        null,
-        LocalDateTime.now(),
-        LocalDateTime.now()
-    )
-
     fun makeActiveStatus() { itemStatus = ItemStatus.ACTIVE_AUCTION }
 
     fun makeEndStatus() { itemStatus = ItemStatus.END_AUCTION }
@@ -51,21 +36,28 @@ data class Item (
         return tryBidPrice > realTimePrice
     }
 
-    fun changeBidItemInfo(realTimePrice: BigDecimal, highestBidMemberId: Long) {
+    fun checkValidMember(memberId: Long): Boolean {
+        return this.memberId != memberId
+    }
+
+    fun changeBidItemInfo(realTimePrice: BigDecimal, highestBidMemberName: String) {
         this.realTimePrice = realTimePrice
-        this.highestBidMemberId = highestBidMemberId
+        this.highestBidMemberName = highestBidMemberName
+        this.bidCount = this.bidCount + 1
     }
 
     fun modifyItem(
         itemName: String,
         basePrice: BigDecimal,
         desiredPrice: BigDecimal,
+        minimumPrice: BigDecimal,
         auctionStartTime: LocalDateTime,
         auctionEndTime: LocalDateTime
     ) {
         this.name = itemName
         this.basePrice = basePrice
         this.desiredPrice = desiredPrice
+        this.minimumPrice = minimumPrice
         this.auctionStartTime = auctionStartTime
         this.auctionEndTime = auctionEndTime
     }
@@ -83,11 +75,11 @@ data class Item (
             memberId = memberId,
             name = itemName,
             basePrice = basePrice,
-            realTimePrice = basePrice,
+            realTimePrice = BigDecimal.ZERO,
             desiredPrice = desiredPrice,
             minimumPrice = minimumPrice,
             bidCount = 0,
-            highestBidMemberId = 0L,
+            highestBidMemberName = "",
             auctionStartTime = auctionStartTime,
             auctionEndTime = auctionEndTime
         )
@@ -105,11 +97,11 @@ data class Item (
             memberId = memberId,
             name = itemName,
             basePrice = basePrice,
-            realTimePrice = basePrice,
+            realTimePrice = BigDecimal.ZERO,
             desiredPrice = desiredPrice,
             minimumPrice = minimumPrice,
             bidCount = 0,
-            highestBidMemberId = 0L,
+            highestBidMemberName = "",
             auctionStartTime = auctionStartTime,
             auctionEndTime = auctionEndTime
         )

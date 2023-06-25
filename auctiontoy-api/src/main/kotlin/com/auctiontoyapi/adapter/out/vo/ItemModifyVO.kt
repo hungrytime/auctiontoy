@@ -8,6 +8,7 @@ data class ItemModifyVO(
     val itemName: String,
     val basePrice: BigDecimal,
     val desiredPrice: BigDecimal,
+    val minimumPrice: BigDecimal,
     val auctionStartTime: LocalDateTime,
     val auctionEndTime: LocalDateTime
 ) {

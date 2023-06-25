@@ -9,10 +9,14 @@ import com.auctiontoyapi.application.port.`in`.BidItemUseCase
 import com.auctiontoyapi.application.port.`in`.ModifyItemUseCase
 import com.auctiontoyapi.application.port.`in`.RegisterItemUseCase
 import com.auctiontoyapi.application.port.out.FindItemPort
+import com.auctiontoyapi.application.port.out.FindMemberPort
 import com.auctiontoyapi.application.port.out.SaveItemPort
 import com.auctiontoydomain.entity.ItemStatus
+import com.auctiontoydomain.exception.MemberException
+import com.auctiontoydomain.exception.enum.ResultCode
 import mu.KLogging
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 
 /**
@@ -22,7 +26,8 @@ import org.springframework.stereotype.Service
 class ItemCommandService(
     private val saveItemPort: SaveItemPort,
     private val kafkaProducer: KafkaProducer,
-    private val findItemPort: FindItemPort
+    private val findItemPort: FindItemPort,
+    private val findMemberPort: FindMemberPort
 ): RegisterItemUseCase, BidItemUseCase, ModifyItemUseCase {
 
     /**
@@ -30,28 +35,45 @@ class ItemCommandService(
      * @param : 아이템을 등록하기 위한 정보
      * */
     override fun register(item: ItemVO) {
+        require(findMemberPort.findByMemberId(item.memberId) != null) {
+            "멤버가 존재하지 않습니다 memberId : ${item.memberId}"
+        }
         saveItemPort.save(item.toItem())
     }
 
-    override fun tryBid(msg: String) {
+    override fun tryBid(msg: BidItemVO) {
         kafkaProducer.sendMessage(msg)
     }
 
     /**
-     * 입찰의 위하 아이템을 조회하고 문제가 없는 경우 아이템의 정보를 바꾸는 함수
+     * 입찰의 위해 아이템을 조회하고 문제가 없는 경우 아이템의 정보를 바꾸는 함수
      * @param : 입찰을 하기 위한 정보
      * */
+    @Transactional
     override fun bid(tryItem: BidItemVO) {
         // 입찰을 시도한 아이템이 현재 입찰이 가능한 상태인지 확인한다
         val item = findItemPort.findItemByItemId(tryItem.itemId)
             ?: throw Exception("존재하는 아이템 아이디가 없습니다 아이템 아이디 : ${tryItem.itemId}")
         // 입찰을 시도한 아이템은 ACTIVE 상태여야 합니다.
+        require(findMemberPort.findByMemberId(tryItem.memberId) != null) {
+            "멤버가 존재하지 않습니다 memberId : ${tryItem.memberId}"
+        }
         require(item.itemStatus == ItemStatus.ACTIVE_AUCTION) { "경매중인 상품이 아닌 경우는 입찰을 진행할 수 없습니다." }
         // 만약 입찰을 시도한 아이템이 가격이 현재 가격보다 같거나 작을 경우는 데이터를 바꾸지 않는다
         if (item.checkValidPrice(tryItem.itemPrice).not()) return
+        // 입찰을 시도한 대상이 본인인 경우는 입찰을 할 수 없다
+        if (item.checkValidMember(tryItem.memberId).not()) throw MemberException(
+            ResultCode.MEMBER_INVALID,
+            "자신의 경매품에는 입찰할 수 없습니다"
+        )
         // 입찰가가 더 큰 경우는 item의 정보값을 바꾼다
-        item.changeBidItemInfo(tryItem.itemPrice, tryItem.memberId)
+        val member = findMemberPort.findByMemberId(item.memberId) ?: throw MemberException(
+            ResultCode.MEMBER_NOT_FOUND,
+            "멤버가 존재하지 않습니다 memberId : ${item.memberId}"
+        )
+        item.changeBidItemInfo(tryItem.itemPrice, member.name)
         saveItemPort.save(item)
+        saveItemPort.saveBid(item, tryItem.itemPrice)
     }
 
     override fun redisTest(item: ItemVO) {
@@ -82,6 +104,7 @@ class ItemCommandService(
             modifyItem.itemName,
             modifyItem.basePrice,
             modifyItem.desiredPrice,
+            modifyItem.minimumPrice,
             modifyItem.auctionStartTime,
             modifyItem.auctionEndTime
         )

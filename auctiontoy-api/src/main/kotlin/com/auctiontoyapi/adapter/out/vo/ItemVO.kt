@@ -5,15 +5,19 @@ import java.math.BigDecimal
 import java.time.LocalDateTime
 
 data class ItemVO(
+    val itemId: Long? = null,
     val memberId: Long,
-    val highestBidMemberId: Long? = null,
     val itemName: String,
+    val itemStatus: String,
     val basePrice: BigDecimal,
     val minimumPrice: BigDecimal,
+    val realTimePrice: BigDecimal,
     val desiredPrice: BigDecimal,
-    val isBidThisItem: Boolean? = null,
+    val bidCount: Long,
+    val highestBidMemberName: String? = null,
     val auctionStartTime: LocalDateTime,
-    val auctionEndTime: LocalDateTime
+    val auctionEndTime: LocalDateTime,
+    val lastBidTime: LocalDateTime? = null
 ) {
     fun toItem(): Item {
         return Item.makeItem(
@@ -41,14 +45,19 @@ data class ItemVO(
 
     companion object {
         fun from(item: Item) = ItemVO(
+            itemId = item.itemId,
             memberId = item.memberId,
-            highestBidMemberId = item.highestBidMemberId,
+            highestBidMemberName = item.highestBidMemberName,
             itemName = item.name,
+            itemStatus = item.itemStatus.toString(),
             basePrice = item.basePrice,
+            realTimePrice = item.realTimePrice,
             desiredPrice = item.desiredPrice,
             minimumPrice = item.minimumPrice,
             auctionStartTime = item.auctionStartTime,
-            auctionEndTime = item.auctionEndTime
+            auctionEndTime = item.auctionEndTime,
+            bidCount = item.bidCount,
+            lastBidTime = item.lastBidTime
         )
     }
 }

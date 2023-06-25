@@ -5,6 +5,7 @@ import com.auctiontoyapi.adapter.out.vo.ItemVO
 import java.math.BigDecimal
 
 data class ItemListDTO(
+    val itemId: Long,
     val memberId: Long,
     val itemName: String,
     val isBidThisItem: Boolean = false,
@@ -16,6 +17,7 @@ data class ItemListDTO(
 ) {
     companion object {
         fun from(item: ItemListVO) = ItemListDTO(
+            itemId = item.itemId,
             memberId = item.memberId,
             itemName = item.itemName,
             itemStatus = item.itemStatus,
