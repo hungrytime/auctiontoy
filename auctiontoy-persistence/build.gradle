@@ -17,3 +17,13 @@ dependencies {
     kapt("com.querydsl:querydsl-apt:4.2.2:jpa")
     implementation(project(':auctiontoy-domain'))
 }
+task {
+    jar {
+        enabled = false
+        duplicatesStrategy = org.gradle.api.file.DuplicatesStrategy.INCLUDE
+
+    }
+//    processResources {
+//        duplicatesStrategy = org.gradle.api.file.DuplicatesStrategy.INCLUDE
+//    }
+}

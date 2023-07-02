@@ -21,9 +21,9 @@ class MemberInquriyController(
      *  @return : logind을 위한 token 정보
      * */
     @GetMapping("/sign-in")
-    fun signIn(@RequestBody member: SignInMemberDTO): ResponseDTO<MemberTokenDTO> {
+    fun signIn(@RequestBody member: SignInMemberDTO): ResponseDTO<String> {
         val memberInfo = signInMemberUseCase.signIn(member.id, member.password)
-        return ResponseDTO.success(MemberTokenDTO.from(memberInfo))
+        return ResponseDTO.success(MemberTokenDTO.from(memberInfo).token)
     }
 
     /**

@@ -32,8 +32,10 @@ data class Item (
 
     fun makeEndStatus() { itemStatus = ItemStatus.END_AUCTION }
 
+    fun makeFailStatus() { itemStatus = ItemStatus.FAILED_AUCTION }
+
     fun checkValidPrice(tryBidPrice: BigDecimal): Boolean {
-        return tryBidPrice > realTimePrice
+        return tryBidPrice > basePrice && tryBidPrice > realTimePrice
     }
 
     fun checkValidMember(memberId: Long): Boolean {
@@ -84,27 +86,27 @@ data class Item (
             auctionEndTime = auctionEndTime
         )
 
-        fun makeItem2(
-            memberId: Long,
-            itemName: String,
-            basePrice: BigDecimal,
-            desiredPrice: BigDecimal,
-            minimumPrice: BigDecimal,
-            auctionStartTime: LocalDateTime,
-            auctionEndTime: LocalDateTime
-        ) = Item(
-            itemId = 10,
-            memberId = memberId,
-            name = itemName,
-            basePrice = basePrice,
-            realTimePrice = BigDecimal.ZERO,
-            desiredPrice = desiredPrice,
-            minimumPrice = minimumPrice,
-            bidCount = 0,
-            highestBidMemberName = "",
-            auctionStartTime = auctionStartTime,
-            auctionEndTime = auctionEndTime
-        )
+//        fun makeItem2(
+//            memberId: Long,
+//            itemName: String,
+//            basePrice: BigDecimal,
+//            desiredPrice: BigDecimal,
+//            minimumPrice: BigDecimal,
+//            auctionStartTime: LocalDateTime,
+//            auctionEndTime: LocalDateTime
+//        ) = Item(
+//            itemId = 10,
+//            memberId = memberId,
+//            name = itemName,
+//            basePrice = basePrice,
+//            realTimePrice = BigDecimal.ZERO,
+//            desiredPrice = desiredPrice,
+//            minimumPrice = minimumPrice,
+//            bidCount = 0,
+//            highestBidMemberName = "",
+//            auctionStartTime = auctionStartTime,
+//            auctionEndTime = auctionEndTime
+//        )
     }
 }
 

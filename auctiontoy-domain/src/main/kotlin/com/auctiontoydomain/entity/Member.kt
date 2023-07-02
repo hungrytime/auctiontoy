@@ -1,6 +1,7 @@
 package com.auctiontoydomain
 
-data class Member(
+data class Member
+    (
     val memberId: Long? = null,
     val id: String,
     val password: String,

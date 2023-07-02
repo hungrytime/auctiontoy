@@ -76,10 +76,10 @@ class ItemCommandService(
         saveItemPort.saveBid(item, tryItem.itemPrice)
     }
 
-    override fun redisTest(item: ItemVO) {
-        val item2 = item.toItem2()
-        saveItemPort.saveRedisOnlyItem(item2.itemId!!.toString(), item2)
-    }
+//    override fun redisTest(item: ItemVO) {
+//        val item2 = item.toItem2()
+//        saveItemPort.saveRedisOnlyItem(item2.itemId!!.toString(), item2)
+//    }
 
     override fun redisTestString(value: String) {
         saveItemPort.saveRedis("stringTest", value)

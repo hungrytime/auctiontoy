@@ -31,17 +31,17 @@ data class ItemVO(
         )
     }
 
-    fun toItem2(): Item {
-        return Item.makeItem2(
-            memberId = memberId,
-            itemName = itemName,
-            basePrice = basePrice,
-            desiredPrice = desiredPrice,
-            minimumPrice = minimumPrice,
-            auctionStartTime = auctionStartTime,
-            auctionEndTime = auctionEndTime
-        )
-    }
+//    fun toItem2(): Item {
+//        return Item.makeItem2(
+//            memberId = memberId,
+//            itemName = itemName,
+//            basePrice = basePrice,
+//            desiredPrice = desiredPrice,
+//            minimumPrice = minimumPrice,
+//            auctionStartTime = auctionStartTime,
+//            auctionEndTime = auctionEndTime
+//        )
+//    }
 
     companion object {
         fun from(item: Item) = ItemVO(

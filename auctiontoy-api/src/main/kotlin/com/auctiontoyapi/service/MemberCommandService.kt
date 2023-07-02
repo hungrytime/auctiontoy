@@ -20,22 +20,23 @@ class MemberCommandService(
         memberCommandAdapter.signUp(MemberVO(member.id, passwordEncoder.encode(member.password), member.name))
     }
 
-    override fun rovoke(id: String) {
-        val member = memberInquiryAdapter.findMemberByUserIdAndStatus(id, REVOKED_MEMBER) ?: throw Exception("찾고자하는 멤버가 없습니다 memberId : $id")
+    override fun revoke(id: String) {
+        val member = memberInquiryAdapter.findMemberByUserIdAndStatus(id, ACTIVE_MEMBER)
+            ?: throw Exception("찾고자하는 멤버가 없습니다 memberId : $id")
         member.changeRevoked()
         memberCommandAdapter.save(member)
     }
 
     override fun logout(header: String) {
-        memberCommandAdapter.logout(extracBearerTokenFromHeader(header))
+        memberCommandAdapter.logout(extractBearerTokenFromHeader(header))
     }
 
     // 헤더의 정보에서 bearer 을 제거한 토큰 정보를 찾아내는 메서드
-    private fun extracBearerTokenFromHeader(header: String): String {
+    private fun extractBearerTokenFromHeader(header: String): String {
         return header.substring("Bearer ".length)
     }
 
     companion object {
-        const val REVOKED_MEMBER = "REVOKED"
+        const val ACTIVE_MEMBER = "ACTIVATED"
     }
 }
