@@ -7,6 +7,6 @@ interface BidItemUseCase {
     fun tryBid(msg: BidItemVO)
     fun bid(tryItem: BidItemVO)
 //    fun redisTest(item: ItemVO)
-    fun redisTestString(value: String)
-    fun lockTest(key: String)
+//    fun redisTestString(value: String)
+//    fun lockTest(key: String)
 }

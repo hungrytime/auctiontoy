@@ -89,7 +89,7 @@ class ItemInquiryController(
      * */
     @GetMapping("/participanting")
     fun getItemListByMemberId(@RequestParam memberId: Long, @ModelAttribute pageParam: PageParam): PageResponseDTO<List<ItemListDTO>> {
-        val itemList = findItemUseCase.findItemListByMemberId(memberId, PageRequest.of(pageParam.page, pageParam.size))
+        val itemList = findItemUseCase.findBidItemListByMemberId(memberId, PageRequest.of(pageParam.page, pageParam.size))
 
         return PageResponseDTO.success(itemList.contents.map { ItemListDTO.from(it) }, itemList.page, itemList.totalPage)
     }

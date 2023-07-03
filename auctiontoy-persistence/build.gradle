@@ -18,11 +18,11 @@ dependencies {
     implementation(project(':auctiontoy-domain'))
 }
 task {
-    jar {
-        enabled = false
-        duplicatesStrategy = org.gradle.api.file.DuplicatesStrategy.INCLUDE
-
-    }
+//    jar {
+//        enabled = false
+//        duplicatesStrategy = org.gradle.api.file.DuplicatesStrategy.INCLUDE
+//
+//    }
 //    processResources {
 //        duplicatesStrategy = org.gradle.api.file.DuplicatesStrategy.INCLUDE
 //    }

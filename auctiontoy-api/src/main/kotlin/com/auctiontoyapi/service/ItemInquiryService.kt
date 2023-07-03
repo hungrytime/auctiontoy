@@ -53,7 +53,7 @@ class ItemInquiryService(
         return PageContent(itemInfo.number, itemInfo.totalPages, itemList)
     }
 
-    override fun findItemListByMemberId(memberId: Long, pageable: Pageable): PageContent<List<ItemListVO>> {
+    override fun findBidItemListByMemberId(memberId: Long, pageable: Pageable): PageContent<List<ItemListVO>> {
         val itemInfo = findItemPort.findBidItemListByMemberId(memberId, pageable)
         val itemList = itemInfo.content.map { ItemListVO.from(it, true, it.bidMyPrice!!) }
         return PageContent(itemInfo.number, itemInfo.totalPages, itemList)
@@ -67,6 +67,11 @@ class ItemInquiryService(
         return findItemPort.findByItemIdInRedis(itemId)?.let { ItemVO.from(it) }
     }
 
+    /**
+     * 아이템 리스트를 가져와 내가 참여한 경매에 대하여 얼마를 배팅했는지 정보를 가져오는 함수
+     * @param : 멤버 ID, itemList
+     * @return : 내가 참여한 아이템의 정보가 기록된 리스트
+     * */
     private fun transferItemToItemList(memberId: Long, item: Page<Item>): List<ItemListVO> {
         if (item.content.size == 0) return listOf()
         val bidItemInfos = HashMap<Long, BigDecimal>()

@@ -64,15 +64,15 @@ class ItemCommandController(
 //        return ResponseDTO.success()
 //    }
 
-    @PostMapping("/save-redis-s")
-    fun redis(@RequestParam value: String): ResponseDTO<Unit> {
-        bidItemUseCase.redisTestString(value)
-        return ResponseDTO.success()
-    }
+//    @PostMapping("/save-redis-s")
+//    fun redis(@RequestParam value: String): ResponseDTO<Unit> {
+//        bidItemUseCase.redisTestString(value)
+//        return ResponseDTO.success()
+//    }
 
     @PostMapping("/lock")
     fun lock(@RequestParam key: String): ResponseDTO<Unit>{
-        bidItemUseCase.lockTest(key)
+//        bidItemUseCase.lockTest(key)
         return ResponseDTO.success()
     }
 }

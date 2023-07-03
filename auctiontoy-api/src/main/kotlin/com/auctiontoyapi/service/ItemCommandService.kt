@@ -51,27 +51,28 @@ class ItemCommandService(
      * */
     @Transactional
     override fun bid(tryItem: BidItemVO) {
+
         // 입찰을 시도한 아이템이 현재 입찰이 가능한 상태인지 확인한다
         val item = findItemPort.findItemByItemId(tryItem.itemId)
             ?: throw Exception("존재하는 아이템 아이디가 없습니다 아이템 아이디 : ${tryItem.itemId}")
-        // 입찰을 시도한 아이템은 ACTIVE 상태여야 합니다.
+        // 입찰을 시도하는 멤버가 존재하지 않는 경우
         require(findMemberPort.findByMemberId(tryItem.memberId) != null) {
             "멤버가 존재하지 않습니다 memberId : ${tryItem.memberId}"
         }
-        require(item.itemStatus == ItemStatus.ACTIVE_AUCTION) { "경매중인 상품이 아닌 경우는 입찰을 진행할 수 없습니다." }
-        // 만약 입찰을 시도한 아이템이 가격이 현재 가격보다 같거나 작을 경우는 데이터를 바꾸지 않는다
-        if (item.checkValidPrice(tryItem.itemPrice).not()) return
         // 입찰을 시도한 대상이 본인인 경우는 입찰을 할 수 없다
         if (item.checkValidMember(tryItem.memberId).not()) throw MemberException(
             ResultCode.MEMBER_INVALID,
             "자신의 경매품에는 입찰할 수 없습니다"
         )
+        // 입찰을 시도한 아이템은 ACTIVE 상태여야 합니다.
+        require(item.itemStatus == ItemStatus.ACTIVE_AUCTION) { "경매중인 상품이 아닌 경우는 입찰을 진행할 수 없습니다." }
+        // 만약 입찰을 시도한 아이템이 가격이 현재 가격보다 같거나 작을 경우는 데이터를 바꾸지 않는다
+        if (item.checkValidPrice(tryItem.itemPrice).not()) return
+
         // 입찰가가 더 큰 경우는 item의 정보값을 바꾼다
-        val member = findMemberPort.findByMemberId(item.memberId) ?: throw MemberException(
-            ResultCode.MEMBER_NOT_FOUND,
-            "멤버가 존재하지 않습니다 memberId : ${item.memberId}"
-        )
-        item.changeBidItemInfo(tryItem.itemPrice, member.name)
+        val member = findMemberPort.findByMemberId(item.memberId)
+
+        item.changeBidItemInfo(tryItem.itemPrice, member!!.name)
         saveItemPort.save(item)
         saveItemPort.saveBid(item, tryItem.itemPrice)
     }
@@ -81,14 +82,14 @@ class ItemCommandService(
 //        saveItemPort.saveRedisOnlyItem(item2.itemId!!.toString(), item2)
 //    }
 
-    override fun redisTestString(value: String) {
-        saveItemPort.saveRedis("stringTest", value)
-    }
+//    override fun redisTestString(value: String) {
+//        saveItemPort.saveRedis("stringTest", value)
+//    }
 
-    @RedisLock(key = "key", name = "redisLock")
-    override fun lockTest(key: String) {
-        logger.info("Process lock test $key")
-    }
+//    @RedisLock(key = "key", name = "redisLock")
+//    override fun lockTest(key: String) {
+//        logger.info("Process lock test $key")
+//    }
 
     /**
      * 입찰하기전 상품의 정보를 바꿀 수 있는 함수
