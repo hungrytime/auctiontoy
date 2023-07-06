@@ -21,10 +21,9 @@ class ItemInquiryController(
      * */
     @GetMapping("/seller")
     fun getSellerItemList(
-        @RequestParam memberId: Long,
-        @ModelAttribute pageParam: PageParam
+        @RequestParam memberId: Long, @RequestParam page: Int, @RequestParam size: Int
     ): PageResponseDTO<List<SellerItemListDTO>> {
-        val itemList = findItemUseCase.findItemListForSeller(memberId, PageRequest.of(pageParam.page, pageParam.size))
+        val itemList = findItemUseCase.findItemListForSeller(memberId, PageRequest.of(page, size))
         return PageResponseDTO.success(itemList.contents.map { SellerItemListDTO.from(it) }, itemList.page, itemList.totalPage)
     }
 
@@ -47,8 +46,8 @@ class ItemInquiryController(
      * @return : 상품의 정보
      * */
     @GetMapping("/participant")
-    fun getItemList(@RequestParam memberId: Long, @ModelAttribute pageParam: PageParam): PageResponseDTO<List<ItemListDTO>> {
-        val itemList = findItemUseCase.findItemList(memberId, PageRequest.of(pageParam.page, pageParam.size))
+    fun getItemList(@RequestParam memberId: Long, @RequestParam page: Int, @RequestParam size: Int): PageResponseDTO<List<ItemListDTO>> {
+        val itemList = findItemUseCase.findItemList(memberId, PageRequest.of(page, size))
         return PageResponseDTO.success(itemList.contents.map { ItemListDTO.from(it) }, itemList.page, itemList.totalPage)
     }
 
@@ -58,12 +57,14 @@ class ItemInquiryController(
      * @return : 상품의 정보
      * */
     @GetMapping("/participant/createdAt")
-    fun getItemListByCreatedAt(@RequestBody form: SearchDateWithPageDTO): PageResponseDTO<List<ItemListDTO>> {
+    fun getItemListByCreatedAt(@RequestParam memberId: Long,
+                               @RequestParam page: Int, @RequestParam size: Int,
+                               @RequestParam startDate:String, @RequestParam endDate: String): PageResponseDTO<List<ItemListDTO>> {
         val itemList = findItemUseCase.findItemListByCreatedAt(
-            form.memberId,
-            form.startDate,
-            form.endDate,
-            PageRequest.of(form.page, form.size)
+            memberId,
+            startDate,
+            endDate,
+            PageRequest.of(page, size)
         )
 
         return PageResponseDTO.success(itemList.contents.map { ItemListDTO.from(it) }, itemList.page, itemList.totalPage)
@@ -75,9 +76,14 @@ class ItemInquiryController(
      * @return : 상품의 정보
      * */
     @GetMapping("/participant/status")
-    fun getItemListByCreatedAt(@RequestParam memberId: Long, @RequestParam status: String, @ModelAttribute pageParam: PageParam): PageResponseDTO<List<ItemListDTO>> {
+    fun getItemListByCreatedAt(
+        @RequestParam memberId: Long,
+        @RequestParam status: String,
+        @RequestParam page: Int,
+        @RequestParam size: Int
+    ): PageResponseDTO<List<ItemListDTO>> {
         val itemList =
-            findItemUseCase.findItemListByStatus(memberId, status, PageRequest.of(pageParam.page, pageParam.size))
+            findItemUseCase.findItemListByStatus(memberId, status, PageRequest.of(page, size))
 
         return PageResponseDTO.success(itemList.contents.map { ItemListDTO.from(it) }, itemList.page, itemList.totalPage)
     }
@@ -88,8 +94,12 @@ class ItemInquiryController(
      * @return : 상품의 정보
      * */
     @GetMapping("/participanting")
-    fun getItemListByMemberId(@RequestParam memberId: Long, @ModelAttribute pageParam: PageParam): PageResponseDTO<List<ItemListDTO>> {
-        val itemList = findItemUseCase.findBidItemListByMemberId(memberId, PageRequest.of(pageParam.page, pageParam.size))
+    fun getItemListByMemberId(
+        @RequestParam memberId: Long,
+        @RequestParam page: Int,
+        @RequestParam size: Int
+    ): PageResponseDTO<List<ItemListDTO>> {
+        val itemList = findItemUseCase.findBidItemListByMemberId(memberId, PageRequest.of(page, size))
 
         return PageResponseDTO.success(itemList.contents.map { ItemListDTO.from(it) }, itemList.page, itemList.totalPage)
     }

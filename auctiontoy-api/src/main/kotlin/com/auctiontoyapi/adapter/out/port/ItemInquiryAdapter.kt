@@ -5,13 +5,11 @@ import com.auctionpersistence.jpa.repositories.ItemJpaRepository
 import com.auctionpersistence.redis.service.RedisService
 import com.auctiontoyapi.adapter.out.vo.BidItemVO
 import com.auctiontoyapi.application.port.out.FindItemPort
-import com.auctiontoyapi.common.toLocalDateTime
 import com.auctiontoydomain.entity.Item
 import com.auctiontoydomain.entity.ItemStatus
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Component
-import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -37,8 +35,8 @@ class ItemInquiryAdapter(
 
     override fun findItemListByCreatedAt(start: String, end: String, pageable: Pageable): Page<Item> {
         return itemJpaRepository.findByCreatedAt(
-            start.toLocalDateTime(baseDateTimeFormatter),
-            end.toLocalDateTime(baseDateTimeFormatter),
+            LocalDateTime.parse(start, baseDateTimeFormatter),
+            LocalDateTime.parse(end, baseDateTimeFormatter),
             pageable
         ).map { it.to() }
     }
@@ -49,6 +47,12 @@ class ItemInquiryAdapter(
 
     override fun findBidItemListByMemberId(memberId: Long, pageable: Pageable): Page<Item> {
         return bidItemJpaRepository.findBidItemByMemberId(memberId, pageable)
+    }
+
+    override fun findBidItemTimeByItemId(itemId: Long): LocalDateTime? {
+        val isExist = bidItemJpaRepository.findBidItemsByItemId(itemId)
+        if (isExist.isNotEmpty()) return bidItemJpaRepository.findBidItemByItemId(itemId).createdAt
+        return null
     }
 
     override fun findByItemStatusAndStartDate(status: String): List<Item> {

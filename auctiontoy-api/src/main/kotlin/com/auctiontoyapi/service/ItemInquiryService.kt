@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
+import java.time.LocalDateTime
 
 @Service
 class ItemInquiryService(
@@ -60,11 +61,16 @@ class ItemInquiryService(
     }
 
     override fun findByItemId(itemId: String): ItemVO? {
-        return findItemPort.findItemByItemId(itemId.toLong())?.let { ItemVO.from(it) }
+        val items = findItemPort.findItemByItemId(itemId.toLong()) ?: return null
+        var lastBidTime: LocalDateTime? = null
+        if(items.itemStatus != ItemStatus.PREPARE_AUCTION) {
+            lastBidTime = findItemPort.findBidItemTimeByItemId(items.itemId!!)
+        }
+        return ItemVO.from(items, lastBidTime)
     }
 
     override fun findByItemIdInRedis(itemId: String): ItemVO? {
-        return findItemPort.findByItemIdInRedis(itemId)?.let { ItemVO.from(it) }
+        return findItemPort.findByItemIdInRedis(itemId)?.let { ItemVO.from(it, null) }
     }
 
     /**

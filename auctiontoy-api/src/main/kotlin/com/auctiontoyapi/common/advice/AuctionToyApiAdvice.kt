@@ -2,6 +2,7 @@ package com.auctiontoyapi.common.advice
 
 import com.auctiontoyapi.adapter.`in`.common.dto.ResponseDTO
 import com.auctiontoydomain.exception.BusinessException
+import com.auctiontoydomain.exception.enum.ResultCode
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -17,7 +18,7 @@ class AuctionToyApiAdvice {
     }
 
     @ExceptionHandler(Exception::class)
-    fun exceptionHandler(e: Exception): String? {
-        return e.message
+    fun exceptionHandler(e: Exception): ResponseDTO<String> {
+        return ResponseDTO.fail(ResultCode.FAIL, content = "error", message = e.message)
     }
 }

@@ -11,4 +11,6 @@ interface BidItemJpaRepository : JpaRepository<BidItemJpaEntity, Long>, BidItemJ
 interface BidItemJpaRepositoryCustom {
     fun findBidItemByMemberIdAndItemIds(memberId: Long, itemId: List<Long>): List<BidItemJpaEntity>
     fun findBidItemByMemberId(memberId: Long, pageable: Pageable): Page<Item>
+    fun findBidItemByItemId(itemId: Long): BidItemJpaEntity
+    fun findBidItemsByItemId(itemId: Long): List<BidItemJpaEntity>
 }

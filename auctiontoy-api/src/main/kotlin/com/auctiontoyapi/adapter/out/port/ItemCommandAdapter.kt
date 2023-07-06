@@ -29,8 +29,8 @@ class ItemCommandAdapter(
         itemJpaRepository.save(ItemJpaEntity.from(item))
     }
 
-    override fun saveBid(item: Item, itemPrice: BigDecimal) {
-        bidItemJpaRepository.save(BidItemJpaEntity.from(item, itemPrice))
+    override fun saveBid(item: Item, memberId: Long, itemPrice: BigDecimal) {
+        bidItemJpaRepository.save(BidItemJpaEntity.from(item, memberId, itemPrice))
     }
 
     /**

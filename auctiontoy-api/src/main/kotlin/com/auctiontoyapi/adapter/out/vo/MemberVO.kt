@@ -3,6 +3,7 @@ package com.auctiontoyapi.adapter.out.vo
 import com.auctiontoydomain.Member
 
 data class MemberVO (
+    val memberId: Long? = null,
     val id: String,
     val password: String,
     val name: String,
@@ -16,6 +17,7 @@ data class MemberVO (
 
     companion object {
         fun from(member: Member) = MemberVO(
+            memberId = member.memberId,
             id = member.id,
             password = member.password,
             name = member.name,

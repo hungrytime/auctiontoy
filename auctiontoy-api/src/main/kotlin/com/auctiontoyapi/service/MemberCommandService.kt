@@ -17,7 +17,13 @@ class MemberCommandService(
 ) : SignUpMemberUseCase, RevokeMemberUseCase, LogoutUseCase {
 
     override fun signUp(member: MemberVO) {
-        memberCommandAdapter.signUp(MemberVO(member.id, passwordEncoder.encode(member.password), member.name))
+        memberCommandAdapter.signUp(
+            MemberVO(
+                id = member.id,
+                password = passwordEncoder.encode(member.password),
+                name = member.name
+            )
+        )
     }
 
     override fun revoke(id: String) {

@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 data class RegisterItemDTO(
-    val memberId: Long,
+    val memberUserId: String,
     val itemName: String,
     val basePrice: BigDecimal,
     val desiredPrice: BigDecimal,
@@ -15,7 +15,7 @@ data class RegisterItemDTO(
     val auctionStartTime: String,
     val auctionEndTime: String
 ) {
-    fun toVO() = ItemVO(
+    fun toVO(memberId: Long) = ItemVO(
         memberId = memberId,
         itemName = itemName,
         itemStatus = ItemStatus.PREPARE_AUCTION.toString(),

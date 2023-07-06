@@ -4,6 +4,7 @@ import com.auctiontoyapi.adapter.`in`.common.dto.ResponseDTO
 import com.auctiontoyapi.adapter.`in`.dto.JoinMemberDTO
 import com.auctiontoyapi.application.port.`in`.FindMemberUseCase
 import com.auctiontoyapi.application.port.`in`.LogoutUseCase
+import com.auctiontoyapi.application.port.`in`.RevokeMemberUseCase
 import com.auctiontoyapi.application.port.`in`.SignUpMemberUseCase
 import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
@@ -16,7 +17,8 @@ import javax.servlet.http.HttpServletRequest
 class MemberCommandController(
     private val signUpMemberUseCase: SignUpMemberUseCase,
     private val findMemberUseCase: FindMemberUseCase,
-    private val logoutUseCase: LogoutUseCase
+    private val logoutUseCase: LogoutUseCase,
+    private val revokeMemberUseCase: RevokeMemberUseCase
 ) {
     /**
      * 멤버 가입을 하기 위해 사용하는 API
@@ -40,6 +42,12 @@ class MemberCommandController(
     fun messageForHeader(request: HttpServletRequest): ResponseDTO<String> {
         val header = request.getHeader("authorization") ?: throw Exception("토큰이 존재하지 않습니다")
         logoutUseCase.logout(header)
+        return ResponseDTO.success("OK")
+    }
+
+    @PostMapping("/revoke")
+    fun revoke(@RequestParam memberUserId: String): ResponseDTO<String> {
+        revokeMemberUseCase.revoke(memberUserId)
         return ResponseDTO.success("OK")
     }
 }

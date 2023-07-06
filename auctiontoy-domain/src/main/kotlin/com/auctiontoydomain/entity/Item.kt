@@ -43,7 +43,12 @@ data class Item (
     }
 
     fun changeBidItemInfo(realTimePrice: BigDecimal, highestBidMemberName: String) {
-        this.realTimePrice = realTimePrice
+        if (desiredPrice <= realTimePrice) {
+            this.realTimePrice = desiredPrice
+            itemStatus = ItemStatus.END_AUCTION
+        } else{
+            this.realTimePrice = realTimePrice
+        }
         this.highestBidMemberName = highestBidMemberName
         this.bidCount = this.bidCount + 1
     }

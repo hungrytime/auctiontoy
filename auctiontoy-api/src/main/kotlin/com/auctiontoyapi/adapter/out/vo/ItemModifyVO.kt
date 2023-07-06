@@ -11,5 +11,4 @@ data class ItemModifyVO(
     val minimumPrice: BigDecimal,
     val auctionStartTime: LocalDateTime,
     val auctionEndTime: LocalDateTime
-) {
-}
+)

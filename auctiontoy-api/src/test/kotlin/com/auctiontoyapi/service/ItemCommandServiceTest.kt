@@ -2,6 +2,7 @@ package com.auctiontoyapi.service
 
 import com.auctiontoyapi.adapter.out.port.KafkaProducer
 import com.auctiontoyapi.adapter.out.vo.BidItemVO
+import com.auctiontoyapi.adapter.out.vo.ItemModifyVO
 import com.auctiontoyapi.application.port.out.FindItemPort
 import com.auctiontoyapi.application.port.out.FindMemberPort
 import com.auctiontoyapi.application.port.out.SaveItemPort
@@ -45,7 +46,24 @@ internal class ItemCommandServiceTest : BehaviorSpec() {
         )
 
         Given("아이템 등록 및 수정"){
+            When("상품 수정 시") {
+                val modifyItem = ItemModifyVO(
+                    1, "modifyItem", BigDecimal(1000), BigDecimal(3000),
+                BigDecimal(2000), LocalDateTime.now(), LocalDateTime.now())
 
+                Then("상품의 상태가 경매 시작전이 아닌 경우") {
+                    every { findItemPort.findItemByItemId(1) } returns defaultActiveItem
+                    shouldThrow<IllegalArgumentException> {
+                        itemCommandService.modify(modifyItem)
+                    }
+                }
+
+                Then("아이템을 정상적으로 수정 가능한 경우") {
+                    every { findItemPort.findItemByItemId(1) } returns defaultPrepareItem
+                    every { saveItemPort.save(defaultPrepareItem) } returns mockk()
+                    itemCommandService.modify(modifyItem)
+                }
+            }
         }
 
         Given("입찰") {
@@ -93,7 +111,7 @@ internal class ItemCommandServiceTest : BehaviorSpec() {
                     every { findMemberPort.findByMemberId(tryBidInfo.memberId) } returns mockk()
                     every { findMemberPort.findByMemberId(defaultActiveItem2.memberId) } returns member
                     every { saveItemPort.save(defaultActiveItem2) } returns mockk()
-                    every { saveItemPort.saveBid(defaultActiveItem2, tryBidInfo.itemPrice) } returns mockk()
+                    every { saveItemPort.saveBid(defaultActiveItem2, 2, tryBidInfo.itemPrice) } returns mockk()
 
                     itemCommandService.bid(tryBidInfo)
                 }

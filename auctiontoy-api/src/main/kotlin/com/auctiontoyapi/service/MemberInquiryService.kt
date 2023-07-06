@@ -7,6 +7,7 @@ import com.auctiontoyapi.application.port.`in`.SignInMemberUseCase
 import com.auctiontoyapi.application.port.out.FindMemberPort
 import com.auctiontoyapi.application.port.out.SignInMemberPort
 import com.auctiontoyapi.common.jwt.JwtTokenProvider
+import com.auctiontoydomain.MemberStatus
 import com.auctiontoydomain.exception.BusinessException
 import com.auctiontoydomain.exception.MemberException
 import com.auctiontoydomain.exception.enum.ResultCode
@@ -25,7 +26,8 @@ class MemberInquiryService(
 
     // 사용자가 입력하는 userId를 기반으로 멤버 검색
     override fun findMemberByMemberId(id: String): MemberVO? {
-        val member = findMemberPort.findMemberByUserId(id) ?: return null
+        val member =
+            findMemberPort.findMemberByUserId(id) ?: return null
         return MemberVO.from(member)
     }
 
@@ -45,6 +47,9 @@ class MemberInquiryService(
             ResultCode.MEMBER_NOT_FOUND,
             "멤버 정보가 없습니다. $id"
         )
+        if(member.memberStatus == MemberStatus.REVOKED) {
+            throw MemberException(ResultCode.MEMBER_INVALID, "멤버가 활성화 상태가 아닙니다. ${member.memberId}")
+        }
         // 토큰 생성
         val token = jwtTokenProvider.createToken(id)
         // Redis에 토큰 정보 저장

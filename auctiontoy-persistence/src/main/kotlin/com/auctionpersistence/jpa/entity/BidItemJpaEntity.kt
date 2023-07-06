@@ -17,9 +17,9 @@ class BidItemJpaEntity(
     val itemPrice: BigDecimal = BigDecimal.ZERO
 ): BaseEntity() {
     companion object {
-        fun from(item: Item, itemPrice: BigDecimal) = BidItemJpaEntity(
+        fun from(item: Item, memberId: Long, itemPrice: BigDecimal) = BidItemJpaEntity(
             itemId = item.itemId!!,
-            memberId = item.memberId,
+            memberId = memberId,
             itemPrice = itemPrice
         )
     }

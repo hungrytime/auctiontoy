@@ -5,8 +5,11 @@ import com.auctiontoyapi.adapter.`in`.dto.BidItemDTO
 import com.auctiontoyapi.adapter.`in`.dto.ModifyItemDTO
 import com.auctiontoyapi.adapter.`in`.dto.RegisterItemDTO
 import com.auctiontoyapi.application.port.`in`.BidItemUseCase
+import com.auctiontoyapi.application.port.`in`.FindMemberUseCase
 import com.auctiontoyapi.application.port.`in`.ModifyItemUseCase
 import com.auctiontoyapi.application.port.`in`.RegisterItemUseCase
+import com.auctiontoydomain.exception.MemberException
+import com.auctiontoydomain.exception.enum.ResultCode
 import org.springframework.web.bind.annotation.*
 
 /**
@@ -17,7 +20,8 @@ import org.springframework.web.bind.annotation.*
 class ItemCommandController(
     private val itemUseCase: RegisterItemUseCase,
     private val modifyItemUseCase: ModifyItemUseCase,
-    private val bidItemUseCase: BidItemUseCase
+    private val bidItemUseCase: BidItemUseCase,
+    private val findMemberUseCase: FindMemberUseCase
 ) {
     /**
      * 제품을 등록하는 함수
@@ -26,7 +30,9 @@ class ItemCommandController(
      * */
     @PostMapping("/register")
     fun registerItem(@RequestBody item: RegisterItemDTO): ResponseDTO<String> {
-        itemUseCase.register(item.toVO())
+        val member = findMemberUseCase.findMemberByMemberId(item.memberUserId)
+            ?: throw MemberException(ResultCode.MEMBER_NOT_FOUND, "찾는 멤버가 없습니다")
+        itemUseCase.register(item.toVO(member.memberId!!))
         return ResponseDTO.success("OK")
     }
 

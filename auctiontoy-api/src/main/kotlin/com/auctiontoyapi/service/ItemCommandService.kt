@@ -35,9 +35,6 @@ class ItemCommandService(
      * @param : 아이템을 등록하기 위한 정보
      * */
     override fun register(item: ItemVO) {
-        require(findMemberPort.findByMemberId(item.memberId) != null) {
-            "멤버가 존재하지 않습니다 memberId : ${item.memberId}"
-        }
         saveItemPort.save(item.toItem())
     }
 
@@ -70,11 +67,12 @@ class ItemCommandService(
         if (item.checkValidPrice(tryItem.itemPrice).not()) return
 
         // 입찰가가 더 큰 경우는 item의 정보값을 바꾼다
-        val member = findMemberPort.findByMemberId(item.memberId)
+        val member = findMemberPort.findByMemberId(tryItem.memberId)
 
         item.changeBidItemInfo(tryItem.itemPrice, member!!.name)
+
         saveItemPort.save(item)
-        saveItemPort.saveBid(item, tryItem.itemPrice)
+        saveItemPort.saveBid(item, tryItem.memberId, tryItem.itemPrice)
     }
 
 //    override fun redisTest(item: ItemVO) {
@@ -97,9 +95,8 @@ class ItemCommandService(
      * */
     override fun modify(modifyItem: ItemModifyVO) {
         val item = findItemPort.findItemByItemId(modifyItem.itemId)
-            ?: throw Exception("존재하는 아이템 아이디가 없습니다 아이템 아이디 : ${modifyItem.itemId}")
 
-        require(item.itemStatus == ItemStatus.PREPARE_AUCTION) { "경매중이거나 종료가된 상품은 수정 할 수 없습니다" }
+        require(item!!.itemStatus == ItemStatus.PREPARE_AUCTION) { "경매중이거나 종료가된 상품은 수정 할 수 없습니다" }
 
         item.modifyItem(
             modifyItem.itemName,

@@ -51,4 +51,17 @@ class BidItemJpaRepositoryImpl : QuerydslRepositorySupport(BidItemJpaEntity::cla
                 PageImpl(it.results, pageable, it.total)
             }
     }
+
+    override fun findBidItemsByItemId(itemId: Long): List<BidItemJpaEntity> {
+        return from(bidItemJpaEntity)
+            .where(bidItemJpaEntity.itemId.eq(itemId))
+            .fetch()
+    }
+
+    override fun findBidItemByItemId(itemId: Long): BidItemJpaEntity {
+        return from(bidItemJpaEntity)
+            .where(bidItemJpaEntity.itemId.eq(itemId))
+            .orderBy(bidItemJpaEntity.bidItemId.desc())
+            .fetchFirst()
+    }
 }

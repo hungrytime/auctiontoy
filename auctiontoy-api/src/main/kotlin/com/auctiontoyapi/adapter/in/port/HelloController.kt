@@ -18,12 +18,12 @@ class HelloController(
         logger.info(memberId)
         return ResponseDTO.success("hello/hello")
     }
-
-    @PostMapping("/hello/buddy")
-    fun hello2(@RequestBody memberId: SignInMemberDTO): ResponseDTO<String> {
-        logger.info(memberId.toString())
-        return ResponseDTO.success("hello/hello2")
-    }
+//
+//    @PostMapping("/hello/buddy")
+//    fun hello2(@RequestBody memberId: SignInMemberDTO): ResponseDTO<String> {
+//        logger.info(memberId.toString())
+//        return ResponseDTO.success("hello/hello2")
+//    }
 
     companion object: KLogging()
 }

@@ -44,7 +44,7 @@ data class ItemVO(
 //    }
 
     companion object {
-        fun from(item: Item) = ItemVO(
+        fun from(item: Item, lastBidTime: LocalDateTime?) = ItemVO(
             itemId = item.itemId,
             memberId = item.memberId,
             highestBidMemberName = item.highestBidMemberName,
@@ -57,7 +57,7 @@ data class ItemVO(
             auctionStartTime = item.auctionStartTime,
             auctionEndTime = item.auctionEndTime,
             bidCount = item.bidCount,
-            lastBidTime = item.lastBidTime
+            lastBidTime = lastBidTime
         )
     }
 }

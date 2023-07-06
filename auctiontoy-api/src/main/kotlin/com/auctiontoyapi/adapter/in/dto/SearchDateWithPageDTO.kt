@@ -8,5 +8,6 @@ data class SearchDateWithPageDTO(
     val startDate: String,
     val endDate: String,
     override val page: Int,
-    override val size: Int
-) : PageParam(page, size)
+    override val size: Int,
+    override val totalPage: Int
+) : PageParam(page, size, totalPage)
